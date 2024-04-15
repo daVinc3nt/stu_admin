@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-const FormData = require("form-data");
 class UserOperation {
     private baseUrl: string;
     constructor() {
@@ -458,26 +457,6 @@ class AgencyOperation {
         }
     }
 
-    async updateLicense(info : UpdatingLicenseInfo, condition: UpdatingAgencyCondition) {
-        try {       
-			// Tạo FormData object và thêm hình ảnh vào đó
-			const formData = new FormData();
-            for (let i = 0; i < info.licenseFiles.length; i++) {
-                formData.append('files', info.licenseFiles[i]);
-            }
-			// Gửi yêu cầu POST để tải lên hình ảnh
-			const response: AxiosResponse = await axios.post(`${this.baseUrl}/update_agency_company_license?agency_id=${condition.agency_id}`, formData , {
-				withCredentials: true,
-			});
-		
-			console.log('Image uploaded successfully:', response.data);
-			return response.data; // Trả về dữ liệu phản hồi từ máy chủ
-	
-		} catch (error: any) {
-			console.error('Error uploading image:', error.response.data);
-			throw error; // Ném lỗi để xử lý bên ngoài
-		} 
-    }
 }
 
 export interface CreatingTransportPartnerByAdminInfo {
@@ -1144,26 +1123,6 @@ class StaffsOperation {
 		}
 	}
 
-	// ROLE: ADMIN, MANAGER, HUMAN_RESOURCE_MANAGER, AGENCY_MANAGER, AGENCY_HUMAN_RESOURCE_MANAGER
-	async updateAvatar(info: UpdatingAvatarStaffInfo, condition: UpdatingStaffCondition) {
-		try {       
-			// Tạo FormData object và thêm hình ảnh vào đó
-			const formData = new FormData();
-			formData.append('avatar', info.avatarFile);
-	
-			// Gửi yêu cầu POST để tải lên hình ảnh
-			const response: AxiosResponse = await axios.patch(`${this.baseUrl}/update_avatar?staff_id=${condition.staff_id}`, formData , {
-				withCredentials: true,
-			});
-	
-			const data = response.data;
-            return { error: data.error, message: data.message };
-		} catch (error: any) {
-			console.error('Error uploading image:', error?.response?.data);
-            console.error("Request that caused the error: ", error?.request);
-            return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null }; // Ném lỗi để xử lý bên ngoài
-		}   
-	}
 
     async logout() {
         try {
@@ -1597,25 +1556,6 @@ class BusinessOperation {
 		}
 	}
 
-    // "ADMIN", "MANAGER", "TELLER", "AGENCY_MANAGER", "AGENCY_TELLER"
-	async updateContract(info: UpdatingContractInfo, condition: UpdatingBusinessCondition) {
-		try {        
-			// Tạo FormData object 
-            const formData = new FormData();
-            formData.append('contract', info.contractFile);
-
-            // Gửi yêu cầu POST để tải lên hình ảnh
-            const response: AxiosResponse = await axios.patch(`${this.baseUrl}/update_contract?business_id=${condition.business_id}`, formData , {
-                withCredentials: true,
-            });
-        
-            const data = response.data;
-            return { error: data.error, message: data.message };
-        } catch (error: any) {
-            console.error('Error uploading file:', error.response.data);
-            return error.response.data; // Ném lỗi để xử lý bên ngoài
-        } 
-	}
 
     // "ADMIN", "MANAGER", "HUMAN_RESOURCE_MANAGER", "TELLER", "COMPLAINTS_SOLVER",
     // "AGENCY_MANAGER", "AGENCY_HUMAN_RESOURCE_MANAGER", "AGENCY_TELLER", "AGENCY_COMPLAINTS_SOLVER", "BUSINESS"
@@ -1910,48 +1850,8 @@ class PartnerStaffOperation {
 		}    
 	}
 
-	// ROLE: ADMIN, MANAGER, HUMAN_RESOURCE_MANAGER, AGENCY_MANAGER, AGENCY_HUMAN_RESOURCE_MANAGER
-	async updatePartnerStaffAvatar(info: UpdatingPartnerStaffAvatarInfo, condition: UpdatingPartnerStaffCondition) {
-		try {      
-			// Tạo FormData object và thêm hình ảnh vào đó
-			const formData = new FormData();
-			formData.append('avatar', info.avatarFile);
-
-			const response: AxiosResponse = await axios.patch(`${this.baseUrl}/update_avatar?staff_id=${condition.staff_id}`, formData , {
-			    withCredentials: true,
-		    });
-		
-            const data = response.data;
-            return { error: data.error, message: data.message };
-		} catch (error: any) {
-			console.error('Error uploading image:', error?.response?.data);
-            console.error("Request that caused the error: ", error?.request);
-            return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null }; // Ném lỗi để xử lý bên ngoài
-		}
-	}
+	// ROLE: ADMIN, MANAGER, HUMAN_RESOURCE_MANAGER, AGENCY_MANAGER, AGENCY_HUMAN_RESOURCE_MANAG
 	
-	// ROLE: ADMIN, MANAGER, HUMAN_RESOURCE_MANAGER, AGENCY_MANAGER, AGENCY_HUMAN_RESOURCE_MANAGER
-	async updatePartnerStaffLicense(info: UpdatingPartnerLicenseImg, condition: UpdatingPartnerStaffCondition) {
-		try {
-			// Tạo FormData object và thêm hình ảnh vào đó
-			const formData = new FormData();
-
-			formData.append('license_before', info.license_before);
-			formData.append('license_after', info.license_after);
-
-			// Gửi yêu cầu POST để tải lên hình ảnh
-			const response: AxiosResponse = await axios.patch(`${this.baseUrl}/update_licenses?staff_id=${condition.staff_id}`, formData , {
-                withCredentials: true,
-            });
-            
-            const data = response.data;
-            return { error: data.error, message: data.message };
-		} catch (error: any) {
-			console.error('Error uploading image:', error?.response?.data);
-            console.error("Request that caused the error: ", error?.request);
-            return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null }; // Ném lỗi để xử lý bên ngoài
-		}
-	}
 
 	// ROLE: ADMIN, MANAGER, HUMAN_RESOURCE_MANAGER, AGENCY_MANAGER, AGENCY_HUMAN_RESOURCE_MANAGER, PARTNER_DRIVER, PARTNER_SHIPPER
 	async findPartnerStaffAvatar(condition: FindingPartnerAvatarAndLicenseCondition) {
@@ -2608,27 +2508,6 @@ class OrdersOperation {
         }
     }
 
-    async checkFileFormat(info: UploadingOrderFileCondition) {
-        try {
-            const formData = new FormData();
-            formData.append("file", info.file);
-
-            const response: AxiosResponse = await axios.post(`${this.baseUrl}/check_file_format`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true,
-            });
-
-            const data = response.data;
-			return { error: data.error, valid: data.valid, message: data.message };
-        } catch (error: any) {
-            console.error('Error checking file format:', error?.response?.data);
-            console.error("Request that caused the error: ", error?.request);
-            return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null };
-        }
-    }
-
     async createByUser(socket: any, info: CreatingOrderByUserInformation) {
         try {
             socket.emit("notifyNewOrder", info)
@@ -2645,26 +2524,6 @@ class OrdersOperation {
         }
     }
 
-    async createByFile(info: UploadingOrderFileCondition) {
-        try {
-            const formData = new FormData();
-            formData.append("file", info.file);
-
-            const response: AxiosResponse = await axios.post(`${this.baseUrl}/create_by_file`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true,
-            });
-
-            const data = response.data;
-			return { error: data.error, message: data.message };
-        } catch (error: any) {
-            console.error('Error creating orders by file:', error?.response?.data);
-            console.error("Request that caused the error: ", error?.request);
-            return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null };
-        }
-    }
 
     async update(info: UpdatingOrderInfo, condition: UpdatingOrderCondition) {
         try {
@@ -2708,66 +2567,6 @@ class OrdersOperation {
             console.log("Error calculating fee: ", error?.response?.data);
             console.error("Request that caused the error: ", error?.request);
             return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null };
-        }
-    }
-
-    async updateImage(info: UpdatingOrderImageInfo, condition: UpdatingOrderImageCondition) {
-        try {       
-			// Tạo FormData object và thêm hình ảnh vào đó
-			const formData = new FormData();
-            for (let i = 0; i < info.files.length; i++) {
-                formData.append('files', info.files[i]);
-            }
-			// Gửi yêu cầu POST để tải lên hình ảnh
-			const response: AxiosResponse = await axios.post(`${this.baseUrl}/update_images?order_id=${condition.order_id}&type=${condition.type}`, formData , {
-				withCredentials: true,
-			});
-		
-			console.log('Image uploaded successfully:', response.data);
-			return response.data; // Trả về dữ liệu phản hồi từ máy chủ
-	
-		} catch (error: any) {
-			console.error('Error uploading image:', error.response.data);
-			throw error; // Ném lỗi để xử lý bên ngoài
-		} 
-    }
-    //get_images
-   
-
-    async updateSignature(info: UpdatingOrderSignatureInfo, condition: UpdatingOrderImageCondition) {
-        try {       
-			// Tạo FormData object và thêm hình ảnh vào đó
-			const formData = new FormData();
-			formData.append('signature', info.signature);
-	
-			// Gửi yêu cầu POST để tải lên hình ảnh
-			const response: AxiosResponse = await axios.post(`${this.baseUrl}/signature?order_id=${condition.order_id}&type=${condition.type}`, formData , {
-				withCredentials: true,
-			});
-	
-			const data = response.data;
-            return { error: data.error, message: data.message };
-		} catch (error: any) {
-			console.error('Error uploading image:', error?.response?.data);
-            console.error("Request that caused the error: ", error?.request);
-            return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null }; // Ném lỗi để xử lý bên ngoài
-		}
-    }
-
-    async getSignature(condition: UpdatingOrderImageCondition) {
-        try {
-            const response = await axios.get(`${this.baseUrl}/signature?order_id=${condition.order_id}&type=${condition.type}`, {
-                withCredentials: true,
-                responseType: 'arraybuffer',
-            });
-    
-            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-            const imgUrl = URL.createObjectURL(blob);
-    
-            return imgUrl;
-        } catch (error: any) {
-            console.error("Error getting signature: ", error);
-            return error.response.data;
         }
     }
 }
