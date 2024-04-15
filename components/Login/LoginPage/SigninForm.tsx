@@ -8,6 +8,7 @@ import LoginLangSelector from "@/components/LangSelector/LoginLangSelector"
 import { FormattedMessage} from "react-intl";
 import { UserContext } from "@/Context/InfoContext/UserContext";
 import { useContext } from "react";
+import { AdminOperation } from "@/ambLib/amb";
 interface FormValues {
   email?: string;
   phoneNumber?: string;
@@ -82,27 +83,18 @@ const SigninForm = () => {
     const {name, pass} = formValues;
     if (!name || !pass)
       return null;
-    const staffsAuthenticate = new StaffsAuthenticate();
-    const staffsOperation= new StaffsOperation();
-    await staffsAuthenticate.login(name, pass)
+    console.log(name, pass)
+    const adminOperation = new AdminOperation();
+    await adminOperation.login(name, pass)
     .then(result => console.log(result))
     .catch(error => console.log(error))
-    const res = await staffsOperation.getAuthenticatedStaffInfo();
-    if (res.data) {
-      setInfo(res.data);
-      router.push("/dashboard")
-    }
+    // const res = await staffsOperation.getAuthenticatedStaffInfo();
+    // if (res.data) {
+    //   setInfo(res.data);
+    //   router.push("/dashboard")
+    // }
   }
-  const staffAuth =() => {
-    const {email, phoneNumber} = formValues;
-    const staffsAuthenticate = new StaffsAuthenticate();
-    if (!email || !phoneNumber)
-      return null;
-    // Send OTP
-    staffsAuthenticate.sendOTP(email, phoneNumber)
-    .then(message => console.log(message))
-    .catch(error => console.log(error)).then(()=>{router.push("/dashboard")});
-  }
+
 
 
 
