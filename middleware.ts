@@ -2,8 +2,6 @@ import { truncateSync } from "fs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
-import { StaffsOperation } from "./TDLib/tdlogistics";
-const getinfo = new StaffsOperation();
 const protectedRoutes = "/dashboard";
 const authRoutes = "/log";
 export async function middleware(request: NextRequest) {
