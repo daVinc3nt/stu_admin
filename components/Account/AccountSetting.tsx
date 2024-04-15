@@ -258,25 +258,6 @@ const AccountSetting = (info) => {
     }
   };
   const [avaterUpload, setAvaterUpload] = useState(null);
-  const handleUpdateAvatar = async () => {
-    const staffInfo: UpdatingAvatarStaffInfo = {
-      avatarFile: avaterUpload,
-    };
-    const id: UpdatingStaffCondition = {
-      staff_id: staff_id,
-    };
-    const response = await userOp2.updateAvatar(staffInfo, id);
-    console.log("response", response);
-    if (response.error === false) {
-      setMessage("Cập nhật ảnh đại diện thành công");
-      openNoti();
-      reloadData();
-      setAvaterUpload(null);
-    } else {
-      setMessage("Cập nhật ảnh đại diện thất bại");
-      openNoti();
-    }
-  };
   return (
     <div className="flex flex-col gap-5  h-full bg-white dark:bg-[#1a1b23] pb-5">
       <div className="flex flex-col place-content-center mt-3">
@@ -326,7 +307,6 @@ const AccountSetting = (info) => {
                 </label>
               </div>
               <button
-                onClick={handleUpdateAvatar}
                 className="text-white place-items-center h-full w-20 font-bold rounded-lg bg-blue-500 hover:bg-blue-400"
               >
                 Xác nhận
