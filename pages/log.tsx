@@ -5,12 +5,7 @@ import MobileLog from "@/components/Login/LoginPage/MobileLog";
 const LogForm: NextPage = () => {
   return (
     <>
-    <div className="hidden md:block"> 
       <LoginPage/>
-    </div>
-    <div className="block md:hidden">
-      <MobileLog/>
-    </div>
     </>
   );
 };

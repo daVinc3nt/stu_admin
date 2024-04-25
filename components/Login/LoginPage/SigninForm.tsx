@@ -44,7 +44,7 @@ const SigninForm = () => {
     }
   );
   const buttonstyle2 = classNames(
-    "mt-7 py-3 px-4  w-[calc(95%)] rounded-full text-white font-bold uppercase text-xs text-center block focus:outline-none cursor-pointer active:scale-110 sm:mt-10 sm:text-sm transition duration-150 bg-indigo-600",
+    "mt-7 py-3 px-4  w-[calc(95%)] rounded-full text-white font-bold uppercase text-xs text-center block focus:outline-none cursor-pointer active:scale-110 sm:mt-10 sm:text-sm transition duration-150 bg-blue-600",
   );
 
 
