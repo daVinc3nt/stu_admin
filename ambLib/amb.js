@@ -60,7 +60,7 @@ var StudentOperation = /** @class */ (function () {
                     case 1:
                         response = _c.sent();
                         data = response.data;
-                        return [2 /*return*/, { error: data.error, valid: data.valid, message: data.message }];
+                        return [2 /*return*/, { error: data.error, valid: data.valid, message: data.message, token: data.token }];
                     case 2:
                         error_1 = _c.sent();
                         console.log("Error logging in: ", (_a = error_1 === null || error_1 === void 0 ? void 0 : error_1.response) === null || _a === void 0 ? void 0 : _a.data);
@@ -71,7 +71,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.create = function (info) {
+    StudentOperation.prototype.create = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_2;
@@ -81,6 +81,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -96,7 +99,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.createByFile = function (info) {
+    StudentOperation.prototype.createByFile = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var formData, response, data, error_3;
@@ -109,6 +112,7 @@ var StudentOperation = /** @class */ (function () {
                         return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create_by_file"), formData, {
                                 headers: {
                                     'Content-Type': 'multipart/form-data',
+                                    Authorization: token.token
                                 },
                                 withCredentials: true,
                             })];
@@ -126,7 +130,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.updateByStudent = function (info, condition) {
+    StudentOperation.prototype.updateByStudent = function (info, condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_4;
@@ -136,6 +140,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?student_id=").concat(condition.student_id), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -151,7 +158,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.updateByAdmin = function (info, condition) {
+    StudentOperation.prototype.updateByAdmin = function (info, condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_5;
@@ -161,6 +168,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?student_id=").concat(condition.student_id), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -201,7 +211,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.delete = function (condition) {
+    StudentOperation.prototype.delete = function (condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_7;
@@ -211,6 +221,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.delete("".concat(this.baseUrl, "/delete?student_id=").concat(condition.student_id), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -226,7 +239,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.findByStudent = function () {
+    StudentOperation.prototype.findByStudent = function (token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_8;
@@ -236,6 +249,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -251,7 +267,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.findByAdmin = function (info) {
+    StudentOperation.prototype.findByAdmin = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_9;
@@ -261,6 +277,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -276,7 +295,7 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
-    StudentOperation.prototype.findStudentRegisteredClass = function () {
+    StudentOperation.prototype.findStudentRegisteredClass = function (token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_10;
@@ -286,6 +305,9 @@ var StudentOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.get("".concat(this.baseUrl, "/get_classes"), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -301,6 +323,34 @@ var StudentOperation = /** @class */ (function () {
             });
         });
     };
+    StudentOperation.prototype.getScore = function (token) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function () {
+            var response, data, error_11;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _c.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, axios_1.default.get("".concat(this.baseUrl, "/get_score"), {
+                                withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
+                            })];
+                    case 1:
+                        response = _c.sent();
+                        data = response.data;
+                        return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
+                    case 2:
+                        error_11 = _c.sent();
+                        console.log("Error update new user: ", (_a = error_11 === null || error_11 === void 0 ? void 0 : error_11.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.error("Request that caused the error: ", error_11 === null || error_11 === void 0 ? void 0 : error_11.request);
+                        return [2 /*return*/, { error: (_b = error_11 === null || error_11 === void 0 ? void 0 : error_11.response) === null || _b === void 0 ? void 0 : _b.data, request: error_11 === null || error_11 === void 0 ? void 0 : error_11.request, status: error_11.response ? error_11.response.status : null }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return StudentOperation;
 }());
 exports.StudentOperation = StudentOperation;
@@ -311,7 +361,7 @@ var TeacherOperation = /** @class */ (function () {
     TeacherOperation.prototype.login = function (username, password) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var response, data, error_11;
+            var response, data, error_12;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -325,35 +375,10 @@ var TeacherOperation = /** @class */ (function () {
                     case 1:
                         response = _c.sent();
                         data = response.data;
-                        return [2 /*return*/, { error: data.error, valid: data.valid, message: data.message }];
-                    case 2:
-                        error_11 = _c.sent();
-                        console.log("Error logging in: ", (_a = error_11 === null || error_11 === void 0 ? void 0 : error_11.response) === null || _a === void 0 ? void 0 : _a.data);
-                        console.error("Request that caused the error: ", error_11 === null || error_11 === void 0 ? void 0 : error_11.request);
-                        return [2 /*return*/, { error: (_b = error_11 === null || error_11 === void 0 ? void 0 : error_11.response) === null || _b === void 0 ? void 0 : _b.data, request: error_11 === null || error_11 === void 0 ? void 0 : error_11.request, status: error_11.response ? error_11.response.status : null }];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    TeacherOperation.prototype.create = function (info) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function () {
-            var response, data, error_12;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
-                                withCredentials: true,
-                            })];
-                    case 1:
-                        response = _c.sent();
-                        data = response.data;
-                        return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
+                        return [2 /*return*/, { error: data.error, valid: data.valid, message: data.message, token: data.token }];
                     case 2:
                         error_12 = _c.sent();
-                        console.log("Error create new user: ", (_a = error_12 === null || error_12 === void 0 ? void 0 : error_12.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.log("Error logging in: ", (_a = error_12 === null || error_12 === void 0 ? void 0 : error_12.response) === null || _a === void 0 ? void 0 : _a.data);
                         console.error("Request that caused the error: ", error_12 === null || error_12 === void 0 ? void 0 : error_12.request);
                         return [2 /*return*/, { error: (_b = error_12 === null || error_12 === void 0 ? void 0 : error_12.response) === null || _b === void 0 ? void 0 : _b.data, request: error_12 === null || error_12 === void 0 ? void 0 : error_12.request, status: error_12.response ? error_12.response.status : null }];
                     case 3: return [2 /*return*/];
@@ -361,7 +386,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.updateByTeacher = function (info, condition) {
+    TeacherOperation.prototype.create = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_13;
@@ -369,8 +394,11 @@ var TeacherOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?teacher_id=").concat(condition.teacher_id), info, {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -378,7 +406,7 @@ var TeacherOperation = /** @class */ (function () {
                         return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
                     case 2:
                         error_13 = _c.sent();
-                        console.log("Error update new user: ", (_a = error_13 === null || error_13 === void 0 ? void 0 : error_13.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.log("Error create new user: ", (_a = error_13 === null || error_13 === void 0 ? void 0 : error_13.response) === null || _a === void 0 ? void 0 : _a.data);
                         console.error("Request that caused the error: ", error_13 === null || error_13 === void 0 ? void 0 : error_13.request);
                         return [2 /*return*/, { error: (_b = error_13 === null || error_13 === void 0 ? void 0 : error_13.response) === null || _b === void 0 ? void 0 : _b.data, request: error_13 === null || error_13 === void 0 ? void 0 : error_13.request, status: error_13.response ? error_13.response.status : null }];
                     case 3: return [2 /*return*/];
@@ -386,7 +414,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.updateByAdmin = function (info, condition) {
+    TeacherOperation.prototype.updateByTeacher = function (info, condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_14;
@@ -396,6 +424,9 @@ var TeacherOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?teacher_id=").concat(condition.teacher_id), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -411,7 +442,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.updatePassword = function (info) {
+    TeacherOperation.prototype.updateByAdmin = function (info, condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_15;
@@ -419,8 +450,11 @@ var TeacherOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update_password"), info, {
+                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?teacher_id=").concat(condition.teacher_id), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -436,7 +470,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.delete = function (condition) {
+    TeacherOperation.prototype.updatePassword = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_16;
@@ -444,8 +478,11 @@ var TeacherOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.delete("".concat(this.baseUrl, "/delete?teacher_id=").concat(condition.teacher_id), {
+                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update_password"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -461,7 +498,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.findByTeacher = function () {
+    TeacherOperation.prototype.delete = function (condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_17;
@@ -469,8 +506,11 @@ var TeacherOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), {
+                        return [4 /*yield*/, axios_1.default.delete("".concat(this.baseUrl, "/delete?teacher_id=").concat(condition.teacher_id), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -486,7 +526,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.findByAdmin = function (info) {
+    TeacherOperation.prototype.findByTeacher = function (token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_18;
@@ -494,8 +534,11 @@ var TeacherOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), info, {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -511,7 +554,7 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
-    TeacherOperation.prototype.findTeacherRegisteredClass = function () {
+    TeacherOperation.prototype.findByAdmin = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_19;
@@ -519,8 +562,11 @@ var TeacherOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.get("".concat(this.baseUrl, "/get_classes"), {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -536,6 +582,34 @@ var TeacherOperation = /** @class */ (function () {
             });
         });
     };
+    TeacherOperation.prototype.findTeacherRegisteredClass = function (token) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function () {
+            var response, data, error_20;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _c.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, axios_1.default.get("".concat(this.baseUrl, "/get_classes"), {
+                                withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
+                            })];
+                    case 1:
+                        response = _c.sent();
+                        data = response.data;
+                        return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
+                    case 2:
+                        error_20 = _c.sent();
+                        console.log("Error update new user: ", (_a = error_20 === null || error_20 === void 0 ? void 0 : error_20.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.error("Request that caused the error: ", error_20 === null || error_20 === void 0 ? void 0 : error_20.request);
+                        return [2 /*return*/, { error: (_b = error_20 === null || error_20 === void 0 ? void 0 : error_20.response) === null || _b === void 0 ? void 0 : _b.data, request: error_20 === null || error_20 === void 0 ? void 0 : error_20.request, status: error_20.response ? error_20.response.status : null }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return TeacherOperation;
 }());
 exports.TeacherOperation = TeacherOperation;
@@ -546,7 +620,7 @@ var AdminOperation = /** @class */ (function () {
     AdminOperation.prototype.login = function (username, password) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var response, data, error_20;
+            var response, data, error_21;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -560,35 +634,10 @@ var AdminOperation = /** @class */ (function () {
                     case 1:
                         response = _c.sent();
                         data = response.data;
-                        return [2 /*return*/, { error: data.error, valid: data.valid, message: data.message }];
-                    case 2:
-                        error_20 = _c.sent();
-                        console.log("Error logging in: ", (_a = error_20 === null || error_20 === void 0 ? void 0 : error_20.response) === null || _a === void 0 ? void 0 : _a.data);
-                        console.error("Request that caused the error: ", error_20 === null || error_20 === void 0 ? void 0 : error_20.request);
-                        return [2 /*return*/, { error: (_b = error_20 === null || error_20 === void 0 ? void 0 : error_20.response) === null || _b === void 0 ? void 0 : _b.data, request: error_20 === null || error_20 === void 0 ? void 0 : error_20.request, status: error_20.response ? error_20.response.status : null }];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    AdminOperation.prototype.create = function (info) {
-        var _a, _b;
-        return __awaiter(this, void 0, void 0, function () {
-            var response, data, error_21;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
-                                withCredentials: true,
-                            })];
-                    case 1:
-                        response = _c.sent();
-                        data = response.data;
-                        return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
+                        return [2 /*return*/, { error: data.error, valid: data.valid, message: data.message, token: data.token }];
                     case 2:
                         error_21 = _c.sent();
-                        console.log("Error create new user: ", (_a = error_21 === null || error_21 === void 0 ? void 0 : error_21.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.log("Error logging in: ", (_a = error_21 === null || error_21 === void 0 ? void 0 : error_21.response) === null || _a === void 0 ? void 0 : _a.data);
                         console.error("Request that caused the error: ", error_21 === null || error_21 === void 0 ? void 0 : error_21.request);
                         return [2 /*return*/, { error: (_b = error_21 === null || error_21 === void 0 ? void 0 : error_21.response) === null || _b === void 0 ? void 0 : _b.data, request: error_21 === null || error_21 === void 0 ? void 0 : error_21.request, status: error_21.response ? error_21.response.status : null }];
                     case 3: return [2 /*return*/];
@@ -596,14 +645,7 @@ var AdminOperation = /** @class */ (function () {
             });
         });
     };
-    return AdminOperation;
-}());
-exports.AdminOperation = AdminOperation;
-var CourseOperation = /** @class */ (function () {
-    function CourseOperation() {
-        this.baseUrl = "https://academic-management-backend.onrender.com/api/v1/courses";
-    }
-    CourseOperation.prototype.create = function (info) {
+    AdminOperation.prototype.create = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_22;
@@ -613,6 +655,9 @@ var CourseOperation = /** @class */ (function () {
                         _c.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -628,7 +673,14 @@ var CourseOperation = /** @class */ (function () {
             });
         });
     };
-    CourseOperation.prototype.update = function (info, condition) {
+    return AdminOperation;
+}());
+exports.AdminOperation = AdminOperation;
+var CourseOperation = /** @class */ (function () {
+    function CourseOperation() {
+        this.baseUrl = "https://academic-management-backend.onrender.com/api/v1/courses";
+    }
+    CourseOperation.prototype.create = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_23;
@@ -636,8 +688,11 @@ var CourseOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?course_id=").concat(condition.course_id), info, {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -645,7 +700,7 @@ var CourseOperation = /** @class */ (function () {
                         return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
                     case 2:
                         error_23 = _c.sent();
-                        console.log("Error update new user: ", (_a = error_23 === null || error_23 === void 0 ? void 0 : error_23.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.log("Error create new user: ", (_a = error_23 === null || error_23 === void 0 ? void 0 : error_23.response) === null || _a === void 0 ? void 0 : _a.data);
                         console.error("Request that caused the error: ", error_23 === null || error_23 === void 0 ? void 0 : error_23.request);
                         return [2 /*return*/, { error: (_b = error_23 === null || error_23 === void 0 ? void 0 : error_23.response) === null || _b === void 0 ? void 0 : _b.data, request: error_23 === null || error_23 === void 0 ? void 0 : error_23.request, status: error_23.response ? error_23.response.status : null }];
                     case 3: return [2 /*return*/];
@@ -653,7 +708,7 @@ var CourseOperation = /** @class */ (function () {
             });
         });
     };
-    CourseOperation.prototype.delete = function (condition) {
+    CourseOperation.prototype.update = function (info, condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_24;
@@ -661,8 +716,11 @@ var CourseOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.delete("".concat(this.baseUrl, "/delete?course_id=").concat(condition.course_id), {
+                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/update?course_id=").concat(condition.course_id), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -678,7 +736,7 @@ var CourseOperation = /** @class */ (function () {
             });
         });
     };
-    CourseOperation.prototype.findAllCourses = function (info) {
+    CourseOperation.prototype.delete = function (condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_25;
@@ -686,8 +744,11 @@ var CourseOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), info, {
+                        return [4 /*yield*/, axios_1.default.delete("".concat(this.baseUrl, "/delete?course_id=").concat(condition.course_id), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -703,7 +764,7 @@ var CourseOperation = /** @class */ (function () {
             });
         });
     };
-    CourseOperation.prototype.findClasses = function (condition) {
+    CourseOperation.prototype.findAllCourses = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_26;
@@ -711,8 +772,11 @@ var CourseOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.get("".concat(this.baseUrl, "/get_classes?course_id=").concat(condition.course_id), {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/get"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -728,14 +792,7 @@ var CourseOperation = /** @class */ (function () {
             });
         });
     };
-    return CourseOperation;
-}());
-exports.CourseOperation = CourseOperation;
-var ClassOperation = /** @class */ (function () {
-    function ClassOperation() {
-        this.baseUrl = "https://academic-management-backend.onrender.com/api/v1/classes";
-    }
-    ClassOperation.prototype.create = function (info) {
+    CourseOperation.prototype.findClasses = function (condition, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_27;
@@ -743,8 +800,11 @@ var ClassOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
+                        return [4 /*yield*/, axios_1.default.get("".concat(this.baseUrl, "/get_classes?course_id=").concat(condition.course_id), {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -752,7 +812,7 @@ var ClassOperation = /** @class */ (function () {
                         return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
                     case 2:
                         error_27 = _c.sent();
-                        console.log("Error create new user: ", (_a = error_27 === null || error_27 === void 0 ? void 0 : error_27.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.log("Error update new user: ", (_a = error_27 === null || error_27 === void 0 ? void 0 : error_27.response) === null || _a === void 0 ? void 0 : _a.data);
                         console.error("Request that caused the error: ", error_27 === null || error_27 === void 0 ? void 0 : error_27.request);
                         return [2 /*return*/, { error: (_b = error_27 === null || error_27 === void 0 ? void 0 : error_27.response) === null || _b === void 0 ? void 0 : _b.data, request: error_27 === null || error_27 === void 0 ? void 0 : error_27.request, status: error_27.response ? error_27.response.status : null }];
                     case 3: return [2 /*return*/];
@@ -760,7 +820,14 @@ var ClassOperation = /** @class */ (function () {
             });
         });
     };
-    ClassOperation.prototype.register = function (info) {
+    return CourseOperation;
+}());
+exports.CourseOperation = CourseOperation;
+var ClassOperation = /** @class */ (function () {
+    function ClassOperation() {
+        this.baseUrl = "https://academic-management-backend.onrender.com/api/v1/classes";
+    }
+    ClassOperation.prototype.create = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_28;
@@ -768,8 +835,11 @@ var ClassOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/register"), info, {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/create"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -785,7 +855,7 @@ var ClassOperation = /** @class */ (function () {
             });
         });
     };
-    ClassOperation.prototype.updateScore = function (info) {
+    ClassOperation.prototype.register = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_29;
@@ -793,8 +863,11 @@ var ClassOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/update_score"), info, {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/register"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -810,7 +883,7 @@ var ClassOperation = /** @class */ (function () {
             });
         });
     };
-    ClassOperation.prototype.cancelRegister = function (info) {
+    ClassOperation.prototype.updateScore = function (info, token) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var response, data, error_30;
@@ -818,8 +891,11 @@ var ClassOperation = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/cancel_register"), info, {
+                        return [4 /*yield*/, axios_1.default.post("".concat(this.baseUrl, "/update_score"), info, {
                                 withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
                             })];
                     case 1:
                         response = _c.sent();
@@ -830,6 +906,34 @@ var ClassOperation = /** @class */ (function () {
                         console.log("Error create new user: ", (_a = error_30 === null || error_30 === void 0 ? void 0 : error_30.response) === null || _a === void 0 ? void 0 : _a.data);
                         console.error("Request that caused the error: ", error_30 === null || error_30 === void 0 ? void 0 : error_30.request);
                         return [2 /*return*/, { error: (_b = error_30 === null || error_30 === void 0 ? void 0 : error_30.response) === null || _b === void 0 ? void 0 : _b.data, request: error_30 === null || error_30 === void 0 ? void 0 : error_30.request, status: error_30.response ? error_30.response.status : null }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ClassOperation.prototype.cancelRegister = function (info, token) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function () {
+            var response, data, error_31;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _c.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, axios_1.default.put("".concat(this.baseUrl, "/cancel_register"), info, {
+                                withCredentials: true,
+                                headers: {
+                                    Authorization: token.token
+                                }
+                            })];
+                    case 1:
+                        response = _c.sent();
+                        data = response.data;
+                        return [2 /*return*/, { error: data.error, data: data.data, message: data.message }];
+                    case 2:
+                        error_31 = _c.sent();
+                        console.log("Error create new user: ", (_a = error_31 === null || error_31 === void 0 ? void 0 : error_31.response) === null || _a === void 0 ? void 0 : _a.data);
+                        console.error("Request that caused the error: ", error_31 === null || error_31 === void 0 ? void 0 : error_31.request);
+                        return [2 /*return*/, { error: (_b = error_31 === null || error_31 === void 0 ? void 0 : error_31.response) === null || _b === void 0 ? void 0 : _b.data, request: error_31 === null || error_31 === void 0 ? void 0 : error_31.request, status: error_31.response ? error_31.response.status : null }];
                     case 3: return [2 /*return*/];
                 }
             });
