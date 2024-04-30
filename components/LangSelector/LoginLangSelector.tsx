@@ -29,7 +29,7 @@ const LangSelector = () => {
       <motion.div animate={open ? "open" : "closed"} className="flex">
         <button
           onClick={() => setOpen((pv) => !pv)}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl active:scale-85 text-indigo-50 bg-indigo-500 hover:bg-indigo-500 transition-colors"
+          className="flex items-center gap-2 px-2 py-3 rounded-full active:scale-85 text-blue-50 bg-blue-600 hover:bg-blue-500 transition-colors"
         >
           <FiGlobe size={20}/>
         </button>
@@ -53,7 +53,7 @@ const Option = ({ text, Icon, handle }) => {
     <motion.li
       variants={itemVariants}
       onClick={() => { handle(text) }}
-      className="flex z-50 items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-indigo-500 transition-colors cursor-pointer"
+      className="flex z-50 items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-blue-100 text-slate-700 hover:text-blue-500 transition-colors cursor-pointer"
     >
       <motion.span variants={actionIconVariants}>
       </motion.span>

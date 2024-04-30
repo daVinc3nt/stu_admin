@@ -10,7 +10,7 @@ import { Libraries} from "@react-google-maps/api";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { UserContext } from "@/Context/InfoContext/UserContext";
-
+import cookie from "js-cookie";
 const googleMapsLibraries: Libraries = ["places"];
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -27,12 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   //   fetchData();
   // }, []);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setValue((prevValue) => !prevValue);
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  useEffect(() => {
+    cookie.set("token","abcd")
+  }, []);
 
   // useEffect(() => {
   //   console.log("cái này dùng để check xem còn cookie không");
