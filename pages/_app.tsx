@@ -29,8 +29,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     cookie.set("token","abcd")
+    setInfo(cookie.get("token"))
   }, []);
-
+  useEffect(() => {
+    console.log(info)
+  }, [info]);
   // useEffect(() => {
   //   console.log("cái này dùng để check xem còn cookie không");
   //   if (!Cookies.get("connect.sid")) {
