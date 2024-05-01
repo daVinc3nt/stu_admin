@@ -1,5 +1,5 @@
 import { UserContext } from "@/Context/InfoContext/UserContext";
-import StaffMenu from "@/components/Staff/StaffMenu";
+import StaffMenu from "@/components/Student/StaffMenu";
 import type { NextPage } from "next";
 import { useContext } from "react";
 const ValidRole_partnerStaffMenu = 
@@ -16,8 +16,6 @@ const ValidRole_StaffMenu =
 , "AGENCY_TELLER", "AGENCY_COMPLAINTS_SOLVER"
 ]
 const staff: NextPage = () => {
-  const {info} = useContext(UserContext)
-  if (!info) return
   return (
     <>
         <StaffMenu /> 

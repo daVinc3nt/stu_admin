@@ -22,15 +22,9 @@ import { FormattedMessage } from "react-intl";
 import MenuHambuger from "./MenuHambuger";
 const SideItemData = [
   {
-    id: 0,
-    title:  <FormattedMessage id="Sidebar.option13" />,
-    url: "/dashboard/account",
-    icon: <AccountBox className="scale-75 lg:block" />,
-  },
-  {
     id: 1,
     title: <FormattedMessage id="Sidebar.option1" />,
-    url: "/dashboard/order",
+    url: "/dashboard/staff",
     icon: <ReceiptLong className="scale-75 lg:block" />,
   },
   {
@@ -49,37 +43,7 @@ const SideItemData = [
         title: <FormattedMessage id="Sidebar.option4" />,
         url: "/dashboard/staff",
         icon: <People className="scale-75 lg:block" />,
-      },
-      {
-        id: 5,
-        title: <FormattedMessage id="Sidebar.option6" />,
-        url: "/dashboard/schedule",
-        icon: <PendingActions className="scale-75 lg:block" />,
-      },
-      {
-        id: 6,
-        title: <FormattedMessage id="Sidebar.option7" />,
-        url: "/dashboard/vehicle",
-        icon: <LocalShipping className="scale-75 lg:block" />,
-      },
-      {
-        id: 10,
-        title: <FormattedMessage id="Sidebar.option12" />,
-        url: "/dashboard/postoffice",
-        icon: <MapsHomeWork className="scale-75 lg:block" />,
-      },
-      {
-        id: 11,
-        title: "Đối tác vận tải",
-        url: "/dashboard/partner",
-        icon: <Handshake className="scale-75 lg:block" />,
-      },
-      {
-        id: 12,
-        title: "Doanh nghiệp",
-        url: "/dashboard/business",
-        icon: <BusinessCenter className="scale-75 lg:block" />,
-      },
+      }
     ],
   },
 ];

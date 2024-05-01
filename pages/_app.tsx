@@ -6,34 +6,22 @@ import { useRouter } from "next/router";
 import { IntlProvider } from "react-intl";
 import * as en from "@/lang/en.json";
 import * as vi from "@/lang/vi.json";
-import { Libraries} from "@react-google-maps/api";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { UserContext } from "@/Context/InfoContext/UserContext";
 import cookie from "js-cookie";
-const googleMapsLibraries: Libraries = ["places"];
 function MyApp({ Component, pageProps }: AppProps) {
 
   const { locale } = useRouter();
   const [info, setInfo] = useState(null);
   const router = useRouter();
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const res = await staff.getAuthenticatedStaffInfo();
-  //     if (res.data)
-  //     setInfo(res.data);
-  //     else router.push("/log")
-  //   };
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
-    cookie.set("token","abcd")
-    setInfo(cookie.get("token"))
+    const fetchData = async () => {
+      if (!cookie.get("token"))
+         router.push("/log")
+    };
+    fetchData();
   }, []);
-  useEffect(() => {
-    console.log(info)
-  }, [info]);
   // useEffect(() => {
   //   console.log("cái này dùng để check xem còn cookie không");
   //   if (!Cookies.get("connect.sid")) {
@@ -42,10 +30,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   //     }
   //   }
   // }, [value]);
-
-  useEffect(() => {
-    console.log(info);
-  }, [info]);
   const messages = {
     vi,
     en,

@@ -9,6 +9,7 @@ import { FormattedMessage} from "react-intl";
 import { UserContext } from "@/Context/InfoContext/UserContext";
 import { useContext } from "react";
 import { AdminOperation } from "@/ambLib/amb";
+import cookie from "js-cookie";
 interface FormValues {
   email?: string;
   phoneNumber?: string;
@@ -77,16 +78,14 @@ const SigninForm = () => {
     const {name, pass} = formValues;
     if (!name || !pass)
       return null;
-    console.log(name, pass)
     const adminOperation = new AdminOperation();
-    await adminOperation.login(name, pass)
-    .then(result => console.log("hello",result))
-    .catch(error => console.log("hello", error))
-    // const res = await staffsOperation.getAuthenticatedStaffInfo();
-    // if (res.data) {
-    //   setInfo(res.data);
-    //   router.push("/dashboard")
-    // }
+    const res=await adminOperation.login(name, pass)
+    console.log(!res?.error)
+    if (!res?.error)
+    {
+      cookie.set("token", res.token)
+      router.push("/dashboard")
+    }
   }
 
 

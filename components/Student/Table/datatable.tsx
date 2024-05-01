@@ -3,6 +3,7 @@ import React from "react";
 import { TbMinusVertical } from "react-icons/tb";
 import { useState } from "react";
 import AddStaff from "./AddStaff/addstaff";
+import cookie from "js-cookie"
 import {
   ColumnDef,
   SortingState,
@@ -38,20 +39,21 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import BasicPopover from "@/components/Common/Popover";
 import { DeletingStaffCondition, StaffsOperation } from "@/TDLib/tdlogistics";
+import AddFile from "./AddStaff/addNoti2";
+import { StudentID, StudentOperation, token } from "@/ambLib/amb";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  info: any;
+  reload: any;
 }
 const validValue = ["AGENCY_MANAGER","AGENCY_HUMAN_RESOURCE_MANAGER", "ADMIN", "HUMAN_RESOURCE_MANAGER"]
-const staff = new StaffsOperation()
+const student = new StudentOperation()
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  info
+  reload
 }: DataTableProps<TData, TValue>) {
-  const role =info?.role
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -77,11 +79,17 @@ export function DataTable<TData, TValue>({
     },
   });
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen2, setModalIsOpen2] = React.useState(false);
 
   const openModal = () => {
     setModalIsOpen(true);
   };
-
+  const openModal2 = () => {
+    setModalIsOpen2(true);
+  };
+  const closeModal2 = () => {
+    setModalIsOpen2(false);
+  };
   const closeModal = () => {
     setModalIsOpen(false);
   };
@@ -97,12 +105,16 @@ export function DataTable<TData, TValue>({
   const handleDeleteRowsSelected = async () => {
     table.getFilteredSelectedRowModel().rows.forEach(async (row) => {
       console.log();
-      const condition:  DeletingStaffCondition = {
-        staff_id: (row.original as any).staff_id,
+      const condition:  StudentID = {
+        student_id: (row.original as any).student_id,
       };
-      const error = await staff.deleteStaff(condition);
+      const myToken: token = {
+        token: cookie.get("token"),
+      };
+      const error = await student.delete(condition, myToken);
       if (error) {
         alert(error.message);
+        return;
       }
     });
   };
@@ -116,6 +128,7 @@ export function DataTable<TData, TValue>({
     if (result) {
       // Gọi hàm handleDeleteRowsSelected để xóa các hàng đã chọn
       handleDeleteRowsSelected();
+      reload();
     }
     // Nếu result là false, tức là người dùng nhấn no
     else {
@@ -180,33 +193,59 @@ export function DataTable<TData, TValue>({
               </DropdownMenu>
             </Dropdown>
           </div>
-          <BasicPopover icon={<FilterAltIcon />}>
-            <Filter
-              type="role"
-              column={table.getColumn("role")}
-              table={table}
-              title="Chức vụ"
-            />
-            <Filter
-              type="selection"
-              column={table.getColumn("active")}
-              options={{ Online: 1, Offline: 0 }}
-              table={table}
-              title="Trạng thái"
-            />
-          </BasicPopover>
           <div className="flex-grow h-10 flex mt-4 sm:mt-0 justify-center sm:justify-end">
-            <Button
-              className="text-xs md:text-sm border border-gray-600 rounded sm:ml-2 w-full sm:w-32 text-center h-full"
-              onClick={openModal}
-            >
-              <FormattedMessage id="Staff.AddButton" />
-            </Button>
-            {modalIsOpen && (validValue.includes(role)) &&<AddStaff onClose={closeModal} info={info} />}
+            <BasicPopover icon={<FilterAltIcon />}>
+              <Filter
+                type="role"
+                column={table.getColumn("role")}
+                table={table}
+                title="Chức vụ"
+              />
+              <Filter
+                type="selection"
+                column={table.getColumn("active")}
+                options={{ Online: 1, Offline: 0 }}
+                table={table}
+                title="Trạng thái"
+              />
+            </BasicPopover>
+            <Dropdown className=" z-30 ">
+              <DropdownTrigger>
+                <Button
+                  className="text-xs md:text-base border border-gray-600 rounded ml-2 w-36 h-10 text-center"
+                  aria-label="Show items per page"
+                >
+                  <FormattedMessage id="Staff.AddButton" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                className="dark:bg-[#1a1b23] bg-white border border-gray-300 rounded w-26"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <DropdownItem>
+                  <Button
+                    className="text-center  dark:text-white w-36"
+                    onClick={openModal}
+                  >
+                    <FormattedMessage id="student.add1" />
+                  </Button>
+                </DropdownItem>
+                <DropdownItem>
+                  <Button
+                    className="text-center  dark:text-white w-36"
+                    onClick={openModal2}
+                  >
+                    <FormattedMessage id="student.add2" />
+                  </Button>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+              {modalIsOpen &&<AddStaff onClose={closeModal} reload={reload}/>}
+              {modalIsOpen2 && ( <AddFile onClose={closeModal2} reloadData={reload} />)}
           </div>
         </div>
       </div>
-      <div className="rounded-md border border-gray-700">
+      <div className="rounded-md h-screen_1/2 flow-y-scroll border border-gray-700">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -259,7 +298,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-center space-x-2 py-4">
+      <div className="relative  flex items-center justify-center space-x-2 py-4">
         <Button
           className={`text-xs md:text-sm justify-self-start rounded-lg border
            border-gray-600 px-4 py-2 bg-transparent hover:bg-gray-700 
