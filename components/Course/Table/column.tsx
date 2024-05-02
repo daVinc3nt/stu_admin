@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/TableUI/checkbox";
 import { FormattedMessage } from "react-intl";
 // Đảm bảo gọi hàm này ở đầu ứng dụng của bạn\
 
-export type student = {
+export type course = {
   active: boolean;
   agency_id: string;
   avatar: string;
@@ -24,7 +24,7 @@ export type student = {
   district: string;
   email: string;
   fullname: string;
-  student_id: number;
+  course_id: number;
   paid_salary: number;
   password: string;
   phone_number: string;
@@ -67,49 +67,49 @@ export async function columns(
         enableHiding: false,
       },
       {
-        accessorKey: "student_id",
+        accessorKey: "course_id",
         header: ({ column }) => {
           return (
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              <FormattedMessage id="student.student_id" />
+              <FormattedMessage id="course.course_id" />
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
       },
       {
-        accessorKey: "fullname",
+        accessorKey: "course_name",
         header: ({ column }) => {
           return (
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              <FormattedMessage id="student.fullname" />
+              <FormattedMessage id="course.course_name" />
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
       },
       {
-        accessorKey: "phone_number",
+        accessorKey: "faculty",
         header: ({ column }) => {
           return (
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              <FormattedMessage id="student.phone_number" />
+              <FormattedMessage id="course.faculty" />
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
       },
       {
-        accessorKey: "major",
+        accessorKey: "student_condition",
 
         header: ({ column }) => {
           return (
@@ -117,45 +117,30 @@ export async function columns(
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              <FormattedMessage id="student.major" />
+              <FormattedMessage id="course.student_condition" />
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
       },
       {
-        accessorKey: "active",
+        accessorKey: "course_type",
         header: ({ column }) => {
           return (
             <Button
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              <FormattedMessage id="student.active" />
+              <FormattedMessage id="course.course_type" />
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
-          );
-        },
-        cell: ({ row }) => {
-          return (
-            <div className="flex items-center">
-              {row.original.active ? (
-                <span className=" text-green-500">
-                  <FormattedMessage id="isActive" />
-                </span>
-              ) : (
-                <span className=" text-red-500">
-                  <FormattedMessage id="isInActive" />
-                </span>
-              )}
-            </div>
           );
         },
       },
       {
         accessorKey: "Chi tiết/Sửa đổi",
         header: () => {
-          return <FormattedMessage id="student.detail" />;
+          return <FormattedMessage id="course.detail" />;
         },
         cell: ({ row }) => {
           const [modalIsOpen, setModalIsOpen] = useState(false);

@@ -7,7 +7,7 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 import { FormattedMessage, useIntl } from "react-intl";
 import PasswordToggle from "./PasswordToggle";
 import { AdministrativeOperation, CreatingStaffByAdminInfo, CreatingStaffByAgencyInfo, StaffsOperation } from "@/TDLib/tdlogistics";
-import { CreatingStudentInfo, StudentOperation, token } from "@/ambLib/amb";
+import { CreatingTeacherInfo, TeacherOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie"
 interface AddStaffProps {
   onClose: () => void;
@@ -136,20 +136,20 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   const [type, setType] = useState();
   const intl = useIntl();
   const initialData = {
-    fullname: "",                 
-    date_of_birth: "",                                     
-    gender: "",                               
-    credential_id: "",               
-    phone_number: "",                  
-    contact_email: "",     
-    address: "",                                            
-    class: "",                           
-    faculty: "",    
-    major: "",                  
-    level: "",                            
-    program: "",    
+    fullname: "",
+    gender: "",
+    date_of_birth: "", // Assuming date is in string format (you can use a specific date type if needed)
+    credential_id: "",
+    contact_email: "",
+    phone_number: "",
+    address: "",
+    home_class: "",
+    degree: "",
+    faculty: "", // Assuming this is supposed to be "faculty"
+    major: "",
+    subject: []
   }
-  const [Studentdata, setStudentdata] = useState<CreatingStudentInfo>(initialData);
+  const [teacherdata, setteacherdata] = useState<CreatingTeacherInfo>(initialData);
   const handleClickOutside = (event: MouseEvent) => {
     if (
       notificationRef.current &&
@@ -180,7 +180,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   };
 
   const handleInputChange = (key: string, value: any) => {
-    setStudentdata((prevState) => ({
+    setteacherdata((prevState) => ({
       ...prevState,
       [key]: value,
     }));
@@ -249,9 +249,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     const myToken: token = {
       token: cookie.get("token"),
     };
-    const student =new StudentOperation()
-    console.log(Studentdata)
-    const response= await student.create(Studentdata, myToken)
+    const teacher =new TeacherOperation()
+    console.log(teacherdata)
+    const response= await teacher.create(teacherdata, myToken)
     console.log(response.error.error)
     if (response.error && response.error?.error)
       {
@@ -259,7 +259,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
         return;
       }
     alert(response.message);
-    setStudentdata(initialData)  
+    setteacherdata(initialData)  
     reload();
   };
 
@@ -299,7 +299,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
           <div className="h-fit overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
             <div className="w-fit h-fit">
               <h1 className="font-semibold pb-2 text-center">
-                <FormattedMessage id="student" />
+                <FormattedMessage id="teacher.Title" />
               </h1>
               <div className="flex flex-col gap-3">
                 <input
@@ -307,9 +307,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.fullname ? "border-red-500" : ""}`}
                   placeholder={intl.formatMessage({
-                    id: "student.fullname",
+                    id: "teacher.fullname",
                   })}
-                  value={Studentdata.fullname}
+                  value={teacherdata.fullname}
                   onChange={(e) => handleInputChange("fullname", e.target.value)}
                 />
 
@@ -318,9 +318,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.phone_number ? "border-red-500" : ""}`}
                   placeholder={intl.formatMessage({
-                    id: "student.phone_number",
+                    id: "teacher.phone_number",
                   })}
-                  value={Studentdata.phone_number}
+                  value={teacherdata.phone_number}
                   onChange={(e) => handleInputChange("phone_number", e.target.value)}
                 />
               </div>
@@ -331,9 +331,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.date_of_birth ? "border-red-500" : ""}`}
                   placeholder={intl.formatMessage({
-                    id: "student.date_of_birth",
+                    id: "teacher.date_of_birth",
                   })}
-                  value={Studentdata.date_of_birth}
+                  value={teacherdata.date_of_birth}
                   onChange={(e) =>
                     handleInputChange("date_of_birth", e.target.value)
                   }
@@ -343,9 +343,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.cccd ? "border-red-500" : ""}`}
                   placeholder={intl.formatMessage({
-                    id: "student.credential_id",
+                    id: "teacher.credential_id",
                   })}
-                  value={Studentdata.credential_id}
+                  value={teacherdata.credential_id}
                   onChange={(e) => handleInputChange("credential_id", e.target.value)}
                 />
                 <input
@@ -353,7 +353,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.email ? "border-red-500" : ""}`}
                   placeholder="Email"
-                  value={Studentdata.contact_email}
+                  value={teacherdata.contact_email}
                   onChange={(e) => handleInputChange("contact_email", e.target.value)}
                 />
                 
@@ -364,19 +364,19 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   className={`text-xs md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.cccd ? "border-red-500" : ""}`}
                   placeholder={intl.formatMessage({
-                    id: "student.class",
+                    id: "teacher.homeroom_class",
                   })}
-                  value={Studentdata.class}
-                  onChange={(e) => handleInputChange("class", e.target.value)}
+                  value={teacherdata.home_class}
+                  onChange={(e) => handleInputChange("home_class", e.target.value)}
                 />
                 <input
                   type="text"
                   className={`text-xs md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
                   ${checkmissing.detail_address ? "border-red-500" : ""}`}
                   placeholder={intl.formatMessage({
-                    id: "student.address",
+                    id: "teacher.address",
                   })}
-                  value={Studentdata.address}
+                  value={teacherdata.address}
                   onChange={(e) =>
                     handleInputChange("address", e.target.value)
                   }
@@ -388,31 +388,31 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   ${checkmissing.role ? "border-red-500" : ""}`}
                 >
                   <CustomDropdown
-                    label={intl.formatMessage({ id: "student.gender" })}
+                    label={intl.formatMessage({ id: "teacher.gender" })}
                     options={["Nam", "Nữ"]}
-                    selectedOption={Studentdata.gender}
+                    selectedOption={teacherdata.gender}
                     onSelectOption={(option) => handleInputChange("gender", option)}
                   />
                 </div>
-                <div
+                {/* <div
                   className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
                   ${checkmissing.role ? "border-red-500" : ""}`}
                 >
                   <CustomDropdown
-                    label={intl.formatMessage({ id: "student.program" })}
+                    label={intl.formatMessage({ id: "teacher.program" })}
                     options={program}
-                    selectedOption={Studentdata.program}
+                    selectedOption={teacherdata.subject}
                     onSelectOption={(option) => handleInputChange("program", option)}
                   />
-                </div>
+                </div> */}
                 <div
                   className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
                   ${checkmissing.role ? "border-red-500" : ""}`}
                 >
                   <CustomDropdown
-                    label={intl.formatMessage({ id: "student.faculty" })}
+                    label={intl.formatMessage({ id: "teacher.faculty" })}
                     options={faculty}
-                    selectedOption={Studentdata.faculty}
+                    selectedOption={teacherdata.faculty}
                     onSelectOption={(option) => handleInputChange("faculty", option)}
                   />
                 </div>
@@ -421,10 +421,10 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   ${checkmissing.role ? "border-red-500" : ""}`}
                 >
                   <CustomDropdown
-                    label={intl.formatMessage({ id: "student.level" })}
-                    options={["Đại học", "Cao học"]}
-                    selectedOption={Studentdata.level}
-                    onSelectOption={(option) => handleInputChange("level", option)}
+                    label={intl.formatMessage({ id: "teacher.degree" })}
+                    options={["Cử nhân", "Thạc sĩ", "Tiến sĩ"]}
+                    selectedOption={teacherdata.degree}
+                    onSelectOption={(option) => handleInputChange("degree", option)}
                   />
                 </div>               
               </div>
@@ -433,9 +433,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                   ${checkmissing.role ? "border-red-500" : ""}`}
                 >
                   <CustomDropdown
-                    label={intl.formatMessage({ id: "student.major" })}
+                    label={intl.formatMessage({ id: "teacher.major" })}
                     options={major}
-                    selectedOption={Studentdata.major}
+                    selectedOption={teacherdata.major}
                     onSelectOption={(option) => handleInputChange("major", option)}
                   />
                 </div>
@@ -449,7 +449,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
             onClick={handleSubmit}
           >
             <span className="hidden xs:block">
-              <FormattedMessage id="Staff.AddButton" />
+              <FormattedMessage id="teacher.add1" />
             </span>
           </Button>
         </div>

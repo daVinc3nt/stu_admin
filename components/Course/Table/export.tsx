@@ -1,8 +1,7 @@
 import { LeakAddTwoTone } from "@mui/icons-material";
-import { student, columns } from "./column";
+import { course, columns } from "./column";
 import { DataTable } from "./datatable";
-import { StaffsOperation, FindingStaffByAdminConditions } from "@/TDLib/tdlogistics";
-import { FindingStudentInfoByAdmin, StudentOperation, token } from "@/ambLib/amb";
+import { CourseOperation, FindingStudentInfoByAdmin, token } from "@/ambLib/amb";
 import cookie from "js-cookie";
 const conditions: FindingStudentInfoByAdmin[] = [];
 async function getData(): Promise<any> {
@@ -10,9 +9,9 @@ async function getData(): Promise<any> {
   const myToken: token = {
     token: cookie.get("token"),
   };
-  const student= new StudentOperation()
+  const course= new CourseOperation()
   console.log(cookie.get("token"))
-  const res = await student.findByAdmin(conditions[0],myToken) 
+  const res = await course.findAllCourses({},myToken) 
   console.log(res)
   // const data = await res.json();
   // console.log(res1)

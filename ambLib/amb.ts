@@ -292,15 +292,15 @@ class StudentOperation {
 
 export interface CreatingTeacherInfo {
     fullname: string;
-    gender: "Nam" | "Nữ";
+    gender: string;
     date_of_birth: string; // Assuming date is in string format (you can use a specific date type if needed)
     credential_id: string;
     contact_email: string;
     phone_number: string;
     address: string;
     home_class: string;
-    degree: "Cử nhân" | "Thạc sĩ" | "Tiến sĩ";
-    falculty: string; // Assuming this is supposed to be "faculty"
+    degree: string;
+    faculty: string; // Assuming this is supposed to be "faculty"
     major: string;
     subject: string[];
 }
@@ -679,7 +679,7 @@ class CourseOperation {
             console.error("Request that caused the error: ", error?.request);
             return { error: error?.response?.data, request: error?.request, status: error.response ? error.response.status : null };
         }
-    }
+    } 
 
     //ROLE: ADMIN, TEACHER, STUDENT
     async findClasses(condition: CourseID, token: token) {

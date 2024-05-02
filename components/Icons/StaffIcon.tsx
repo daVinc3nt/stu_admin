@@ -11,7 +11,7 @@ function StaffIcon({ fill = "#6C7281", ...rest }) {
       width={30}
       height={30}
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
       <g
         id="SVGRepo_tracerCarrier"
         stroke-linecap="round"

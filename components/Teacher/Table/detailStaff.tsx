@@ -5,8 +5,7 @@ import { Button } from "@nextui-org/react";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { User, Pencil } from "lucide-react";
 import { FormattedMessage } from "react-intl";
-import { StudentID, StudentOperation, token } from "@/ambLib/amb";
-import cookie from "js-cookie";
+import { TeacherOperation } from "@/ambLib/amb";
 const KeyCanEdit = [    
   "fullname",                 
   "date_of_birth",                                     
@@ -26,10 +25,9 @@ const KeyCanEdit = [
 interface DetailStaffProps {
   onClose: () => void;
   dataInitial: any;
-  reload: any;
 }
 
-const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload }) => {
+const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial }) => {
   const [isShaking, setIsShaking] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
@@ -76,17 +74,13 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
   const handleEditClick = () => {
     setIsEditing(true);
   };
-  const handleSaveClick = async () => {
+  const handleSaveClick = () => {
     // Gửi API về server để cập nhật dữ liệu
     // Sau khi hoàn thành, có thể tắt chế độ chỉnh sửa
-    const myToken: token = {
-      token: cookie.get("token"),
-    };
-    const condition: StudentID = {student_id: dataInitial.student_id }
-    const staff =new StudentOperation()
-    setIsEditing(false);
-    await staff.updateByAdmin(updateData, condition, myToken )
-    reload()
+    // const condition: UpdatingteacherInfoByAdmin = {staff_id: dataInitial.staff_id }
+    // const staff =new teacherOperation()
+    // staff.updateByAdmin(updateData, condition, )
+    // setIsEditing(false);
   };
 
   const traverse = (obj, isEditing, canEdit?) => {
@@ -98,7 +92,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       if (obj[key] && typeof obj[key] === 'object') {
         traverse(obj[key], isEditing);
       } else {
-        const formattedKey = `student.${key}`;
+        const formattedKey = `teacher.${key}`;
         const formattedValue = obj[key] ? obj[key] : <FormattedMessage id={`order.noInfo`} />;
         const element = (
           <div key={key} id="order_id" className="bg-gray-100 p-3 rounded-xl shadow-inner">
@@ -130,14 +124,14 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     return (
       <div className="flex flex-col overflow-y-scroll">
         <div className="text-xl text-black dark:text-white font-bold uppercase text-center">
-          <FormattedMessage id="student.canEdit" />
+          <FormattedMessage id="teacher.canEdit" />
         </div>
         <div className="grid-cols-2 grid lg:grid-cols-3 p-10 gap-4">
           {editableElements}
         </div>
 
         <div className="text-xl text-black dark:text-white font-bold uppercase text-center">
-          <FormattedMessage id="student.cannotEdit" />
+          <FormattedMessage id="teacher.cannotEdit" />
         </div>
         <div className="grid-cols-2 grid lg:grid-cols-3 p-10 gap-4">
           {nonEditableElements}
@@ -169,7 +163,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       >
         <div className="relative items-center justify-center flex-col flex h-10 w-full border-b-2 border-[#545e7b]">
           <div className="font-bold text-lg sm:text-2xl pb-2 text-black dark:text-white w-full text-center">
-            <FormattedMessage id="student.innfomation" />
+            <FormattedMessage id="teacher.innfomation" />
           </div>
           <Button
             className="absolute right-0 w-8 h-8 rounded-full mb-2 hover:bg-gray-300"
@@ -184,7 +178,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
               <div className="flex flex-col gap-5">
                 <div>
                   <div className="text-center text-xl font-bold uppercase">
-                    <FormattedMessage id="student.Image" />
+                    <FormattedMessage id="teacher.Image" />
                   </div>
                   <div>
                     <User className="w-80 h-80" />

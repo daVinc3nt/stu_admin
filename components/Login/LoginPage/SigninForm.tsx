@@ -36,7 +36,7 @@ const SigninForm = () => {
   
 
   const buttonstyle = classNames(
-    "mt-7 py-3 px-4  w-[calc(95%)] rounded-full text-white font-bold uppercase text-xs text-center block focus:outline-none cursor-pointer active:scale-110 sm:mt-10 sm:text-sm transition duration-150",
+    "mt-7 py-3 px-4  w-full rounded-full text-white font-bold uppercase text-xs text-center block focus:outline-none cursor-pointer active:scale-110 sm:mt-10 sm:text-sm transition duration-150",
     {
       ["bg-blue-200 animate-shake"]: shake,
       ["bg-blue-600"]: !shake,
@@ -85,6 +85,9 @@ const SigninForm = () => {
     {
       cookie.set("token", res.token)
       router.push("/dashboard")
+    }
+    else{
+      alert(res.error.error)
     }
   }
 

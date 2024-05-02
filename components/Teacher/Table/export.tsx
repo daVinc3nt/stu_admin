@@ -1,18 +1,17 @@
 import { LeakAddTwoTone } from "@mui/icons-material";
-import { student, columns } from "./column";
+import { columns } from "./column";
 import { DataTable } from "./datatable";
-import { StaffsOperation, FindingStaffByAdminConditions } from "@/TDLib/tdlogistics";
-import { FindingStudentInfoByAdmin, StudentOperation, token } from "@/ambLib/amb";
+import {  FindingTeacherInfoByAdmin,  TeacherOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie";
-const conditions: FindingStudentInfoByAdmin[] = [];
+const conditions: FindingTeacherInfoByAdmin[] = [];
 async function getData(): Promise<any> {
   // Fetch data from your API here.p
   const myToken: token = {
     token: cookie.get("token"),
   };
-  const student= new StudentOperation()
+  const teacher= new TeacherOperation()
   console.log(cookie.get("token"))
-  const res = await student.findByAdmin(conditions[0],myToken) 
+  const res = await teacher.findByAdmin(conditions[0],myToken) 
   console.log(res)
   // const data = await res.json();
   // console.log(res1)
@@ -24,11 +23,10 @@ export default async function DemoPage(reloadData:any) {
   // const test = useContext(UserContext)
   console.log(cookie.get("token"))
   const data = await getData();
-  const columnsWdata = await columns(reloadData);
   if (data)
     return(
       <div>
-        <DataTable columns={columnsWdata} data={data} reload={reloadData}/>
+        <DataTable columns={columns} data={data} reload={reloadData}/>
       </div>
     )
   else 

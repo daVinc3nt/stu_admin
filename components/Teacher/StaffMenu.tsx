@@ -6,18 +6,18 @@ import { FormattedMessage } from "react-intl";
 import { useContext } from "react";
 import { UserContext } from "@/Context/InfoContext/UserContext";
 import cookie from "js-cookie"
-
 const StaffMenu = () => {
+  const {info} = useContext(UserContext)
   const [demoPage, setDemoPage] = useState(<LoadingSkeleton />);
   const fetchDemoPage = async () => {
       const result = await DemoPage(reloadData);
       setDemoPage(result);
       console.log("đã gọi lại bảng")
   };
-  const reloadData = useCallback(() => {
+    const reloadData = useCallback(() => {
       fetchDemoPage();
     }, []);
-  useEffect(() => {
+    useEffect(() => {
       fetchDemoPage();
     }, []);
   return (
@@ -27,7 +27,7 @@ const StaffMenu = () => {
           <div className="container shadow-sm rounded-xl px-3 bg-white dark:text-white dark:bg-[#1a1b23]">
             <div className="relative text-3xl font-bold border-b-[1px] border-gray-600">
               <div className=" font-bold text-xl sm:text-3xl pt-3 pb-2 text-center">
-                <FormattedMessage id="student.Title" />
+                <FormattedMessage id="teacher.Title" />
               </div>
             </div>
             <div className="w-full">{demoPage}</div>

@@ -24,27 +24,20 @@ const SideItemData = [
   {
     id: 1,
     title: <FormattedMessage id="Sidebar.option1" />,
-    url: "/dashboard/staff",
+    url: "/dashboard/student",
     icon: <ReceiptLong className="scale-75 lg:block" />,
   },
   {
     id: 2,
     title: <FormattedMessage id="Sidebar.option2" />,
-    url: "/dashboard/consignment",
+    url: "/dashboard/teacher",
     icon: <Inventory className="scale-75 lg:block" />,
   },
   {
     id: 3,
     title: <FormattedMessage id="Sidebar.option3" />,
+    url: "/dashboard/course",
     icon: <Assistant className="scale-75 lg:block" />,
-    submenus: [
-      {
-        id: 4,
-        title: <FormattedMessage id="Sidebar.option4" />,
-        url: "/dashboard/staff",
-        icon: <People className="scale-75 lg:block" />,
-      }
-    ],
   },
 ];
 export default function SideBar({ toggleCollapse }) {

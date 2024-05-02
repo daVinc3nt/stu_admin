@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { TbMinusVertical } from "react-icons/tb";
 import { useState } from "react";
 import AddStaff from "./AddStaff/addstaff";
@@ -39,15 +39,14 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 import BasicPopover from "@/components/Common/Popover";
 import { DeletingStaffCondition, StaffsOperation } from "@/TDLib/tdlogistics";
-import AddFile from "./AddStaff/addNoti2";
-import { StudentID, StudentOperation, token } from "@/ambLib/amb";
+import { TeacherID, TeacherOperation, token } from "@/ambLib/amb";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   reload: any;
 }
 const validValue = ["AGENCY_MANAGER","AGENCY_HUMAN_RESOURCE_MANAGER", "ADMIN", "HUMAN_RESOURCE_MANAGER"]
-const student = new StudentOperation()
+const teacher = new TeacherOperation()
 
 export function DataTable<TData, TValue>({
   columns,
@@ -105,13 +104,13 @@ export function DataTable<TData, TValue>({
   const handleDeleteRowsSelected = async () => {
     table.getFilteredSelectedRowModel().rows.forEach(async (row) => {
       console.log();
-      const condition:  StudentID = {
-        student_id: (row.original as any).student_id,
+      const condition:  TeacherID = {
+        teacher_id: (row.original as any).teacher_id,
       };
       const myToken: token = {
         token: cookie.get("token"),
       };
-      const res = await student.delete(condition, myToken);
+      const res = await teacher.delete(condition, myToken);
       if (res.error) {
         alert(res.error.message);
         return;
@@ -136,6 +135,7 @@ export function DataTable<TData, TValue>({
       // Không làm gì cả
     }
   };
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -151,7 +151,7 @@ export function DataTable<TData, TValue>({
                 table.getColumn("fullname")?.setFilterValue(event.target.value)
               }
               className={`peer h-10 self-center w-full border border-gray-600 rounded focus:outline-none focus:border-blue-500 truncate bg-transparent
-                    text-left placeholder-transparent pl-3 pt-2 pr-12 text-sm text-white`}
+                    text-left placeholder-transparent pl-3 pt-2 pr-12 text-sm text-black dark:text-white`}
               placeholder=""
             />
             <label
@@ -209,43 +209,18 @@ export function DataTable<TData, TValue>({
                 title="Trạng thái"
               />
             </BasicPopover>
-            <Dropdown className=" z-30 ">
-              <DropdownTrigger>
-                <Button
-                  className="text-xs md:text-base border border-gray-600 rounded ml-2 w-36 h-10 text-center"
-                  aria-label="Show items per page"
-                >
-                  <FormattedMessage id="Staff.AddButton" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                className="dark:bg-[#1a1b23] bg-white border border-gray-300 rounded w-26"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <DropdownItem>
-                  <Button
-                    className="text-center  dark:text-white w-36"
+            
+              <Button
+                    className="text-xs md:text-base border border-gray-600 rounded ml-2 w-36 h-10 text-center"
                     onClick={openModal}
                   >
-                    <FormattedMessage id="student.add1" />
-                  </Button>
-                </DropdownItem>
-                <DropdownItem>
-                  <Button
-                    className="text-center  dark:text-white w-36"
-                    onClick={openModal2}
-                  >
-                    <FormattedMessage id="student.add2" />
-                  </Button>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+                    <FormattedMessage id="teacher.add1" />
+              </Button>
               {modalIsOpen &&<AddStaff onClose={closeModal} reload={reload}/>}
-              {modalIsOpen2 && ( <AddFile onClose={closeModal2} reloadData={reload} />)}
           </div>
         </div>
       </div>
-      <div className="rounded-md h-fit overflow-y-scroll border border-gray-700">
+      <div className="rounded-md h-screen_1/2 overflow-y-scroll border border-gray-700">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -40,14 +40,14 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import BasicPopover from "@/components/Common/Popover";
 import { DeletingStaffCondition, StaffsOperation } from "@/TDLib/tdlogistics";
 import AddFile from "./AddStaff/addNoti2";
-import { StudentID, StudentOperation, token } from "@/ambLib/amb";
+import { CourseID, CourseOperation, token } from "@/ambLib/amb";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   reload: any;
 }
 const validValue = ["AGENCY_MANAGER","AGENCY_HUMAN_RESOURCE_MANAGER", "ADMIN", "HUMAN_RESOURCE_MANAGER"]
-const student = new StudentOperation()
+const course = new CourseOperation()
 
 export function DataTable<TData, TValue>({
   columns,
@@ -80,16 +80,20 @@ export function DataTable<TData, TValue>({
   });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen2, setModalIsOpen2] = React.useState(false);
-
+  const level = {
+    "DC": "Đại cương",
+    "TC":  "GDTC",
+    "QP": "GDQP",
+    "NN": "Ngoại ngữ",
+    "NM": "Nhập môn",
+    "QL": "Quản lý",
+    "CS": "Cơ sở",
+    "CN": "Chuyên ngành"
+  };
   const openModal = () => {
     setModalIsOpen(true);
   };
-  const openModal2 = () => {
-    setModalIsOpen2(true);
-  };
-  const closeModal2 = () => {
-    setModalIsOpen2(false);
-  };
+
   const closeModal = () => {
     setModalIsOpen(false);
   };
@@ -105,13 +109,13 @@ export function DataTable<TData, TValue>({
   const handleDeleteRowsSelected = async () => {
     table.getFilteredSelectedRowModel().rows.forEach(async (row) => {
       console.log();
-      const condition:  StudentID = {
-        student_id: (row.original as any).student_id,
+      const condition:  CourseID = {
+        course_id: (row.original as any).course_id,
       };
       const myToken: token = {
         token: cookie.get("token"),
       };
-      const res = await student.delete(condition, myToken);
+      const res = await course.delete(condition, myToken);
       if (res.error) {
         alert(res.error.message);
         return;
@@ -142,25 +146,25 @@ export function DataTable<TData, TValue>({
         <div className="w-full flex flex-col sm:flex-row">
           <div className="relative w-full sm:w-1/2 lg:w-1/3 flex">
             <input
-              id="staffSearch"
+              id="courseSearch"
               type="text"
               value={
-                (table.getColumn("fullname")?.getFilterValue() as string) ?? ""
+                (table.getColumn("course_name")?.getFilterValue() as string) ?? ""
               }
               onChange={(event) =>
-                table.getColumn("fullname")?.setFilterValue(event.target.value)
+                table.getColumn("course_name")?.setFilterValue(event.target.value)
               }
               className={`peer h-10 self-center w-full border border-gray-600 rounded focus:outline-none focus:border-blue-500 truncate bg-transparent
-                    text-left placeholder-transparent pl-3 pt-2 pr-12 text-sm text-white`}
+                    text-left placeholder-transparent pl-3 pt-2 pr-12 text-sm text-black dark:text-white`}
               placeholder=""
             />
             <label
-              htmlFor="staffSearch"
+              htmlFor="courseSearch"
               className={`absolute left-3 -top-0 text-xxs leading-5 text-gray-500 transition-all 
                     peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2.5 
                     peer-focus:-top-0.5 peer-focus:leading-5 peer-focus:text-blue-500 peer-focus:text-xxs`}
             >
-              <FormattedMessage id="Staff.SearchBox" />
+              <FormattedMessage id="course.SearchBox" />
             </label>
             <Dropdown className="z-30">
               <DropdownTrigger>
@@ -195,53 +199,28 @@ export function DataTable<TData, TValue>({
           </div>
           <div className="flex-grow h-10 flex mt-4 sm:mt-0 justify-center sm:justify-end">
             <BasicPopover icon={<FilterAltIcon />}>
-              <Filter
-                type="major"
-                column={table.getColumn("major")}
-                table={table}
-                title="Chuyên ngành"
-              />
-              <Filter
+              {/* <Filter
                 type="selection"
-                column={table.getColumn("active")}
-                options={{ Online: 1, Offline: 0 }}
+                column={table.getColumn("course_type")}
                 table={table}
-                title="Trạng thái"
+                options={level}
+                title="Mức độ của khoá"
+              />  */}
+              <Filter
+                type="faculty"
+                column={table.getColumn("faculty")}
+                table={table}
+                title="Thuộc khoa"
               />
             </BasicPopover>
-            <Dropdown className=" z-30 ">
-              <DropdownTrigger>
-                <Button
-                  className="text-xs md:text-base border border-gray-600 rounded ml-2 w-36 h-10 text-center"
-                  aria-label="Show items per page"
-                >
-                  <FormattedMessage id="Staff.AddButton" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                className="dark:bg-[#1a1b23] bg-white border border-gray-300 rounded w-26"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <DropdownItem>
-                  <Button
-                    className="text-center  dark:text-white w-36"
-                    onClick={openModal}
-                  >
-                    <FormattedMessage id="student.add1" />
-                  </Button>
-                </DropdownItem>
-                <DropdownItem>
-                  <Button
-                    className="text-center  dark:text-white w-36"
-                    onClick={openModal2}
-                  >
-                    <FormattedMessage id="student.add2" />
-                  </Button>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <Button
+              className="text-xs md:text-base border border-gray-600 rounded ml-2 w-36 h-10 text-center"
+              onClick={openModal}
+            >
+              <FormattedMessage id="course.add1" />
+            </Button>
               {modalIsOpen &&<AddStaff onClose={closeModal} reload={reload}/>}
-              {modalIsOpen2 && ( <AddFile onClose={closeModal2} reloadData={reload} />)}
+            
           </div>
         </div>
       </div>

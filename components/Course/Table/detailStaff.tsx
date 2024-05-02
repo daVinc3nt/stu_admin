@@ -5,23 +5,17 @@ import { Button } from "@nextui-org/react";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { User, Pencil } from "lucide-react";
 import { FormattedMessage } from "react-intl";
-import { StudentID, StudentOperation, token } from "@/ambLib/amb";
+import { CourseID, CourseOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie";
 const KeyCanEdit = [    
-  "fullname",                 
-  "date_of_birth",                                     
-  "gender",                               
-  "credential_id",               
-  "phone_number",                  
-  "contact_email", 
-  "username",
-  "password",    
-  "address",                                            
-  "class",                           
-  "faculty",    
-  "major",                  
-  "level",                            
-  "program "]
+  "course_name",
+  "credits",
+  "course_type",
+  "major",
+  "faculty",
+  "course_condition", // Assuming this can be an array of any type
+  "student_condition"
+]
 
 interface DetailStaffProps {
   onClose: () => void;
@@ -82,10 +76,10 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     const myToken: token = {
       token: cookie.get("token"),
     };
-    const condition: StudentID = {student_id: dataInitial.student_id }
-    const staff =new StudentOperation()
+    const condition: CourseID = {course_id: dataInitial.course_id }
+    const course =new CourseOperation()
     setIsEditing(false);
-    await staff.updateByAdmin(updateData, condition, myToken )
+    await course.update(updateData, condition, myToken )
     reload()
   };
 
@@ -98,7 +92,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       if (obj[key] && typeof obj[key] === 'object') {
         traverse(obj[key], isEditing);
       } else {
-        const formattedKey = `student.${key}`;
+        const formattedKey = `course.${key}`;
         const formattedValue = obj[key] ? obj[key] : <FormattedMessage id={`order.noInfo`} />;
         const element = (
           <div key={key} id="order_id" className="bg-gray-100 p-3 rounded-xl shadow-inner">
@@ -128,16 +122,16 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       }
     });
     return (
-      <div className="flex flex-col overflow-y-scroll">
+      <div className="flex flex-col overflow-y-scroll w-fit no-scrollbar">
         <div className="text-xl text-black dark:text-white font-bold uppercase text-center">
-          <FormattedMessage id="student.canEdit" />
+          <FormattedMessage id="course.canEdit" />
         </div>
         <div className="grid-cols-2 grid lg:grid-cols-3 p-10 gap-4">
           {editableElements}
         </div>
 
         <div className="text-xl text-black dark:text-white font-bold uppercase text-center">
-          <FormattedMessage id="student.cannotEdit" />
+          <FormattedMessage id="course.cannotEdit" />
         </div>
         <div className="grid-cols-2 grid lg:grid-cols-3 p-10 gap-4">
           {nonEditableElements}
@@ -160,7 +154,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     >
       <motion.div
         ref={notificationRef}
-        className={`relative w-[98%] sm:w-9/12 bg-white dark:bg-[#14141a] h-168 rounded-xl p-4 overflow-y-auto
+        className={`relative w-fit bg-white dark:bg-[#14141a] h-fit rounded-xl p-4 overflow-y-auto
           ${isShaking ? "animate-shake" : ""}`}
         initial={{ scale: 0 }}
         animate={{ scale: isVisible ? 1 : 0 }}
@@ -169,7 +163,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       >
         <div className="relative items-center justify-center flex-col flex h-10 w-full border-b-2 border-[#545e7b]">
           <div className="font-bold text-lg sm:text-2xl pb-2 text-black dark:text-white w-full text-center">
-            <FormattedMessage id="student.innfomation" />
+            <FormattedMessage id="course.innfomation" />
           </div>
           <Button
             className="absolute right-0 w-8 h-8 rounded-full mb-2 hover:bg-gray-300"
@@ -178,25 +172,16 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
             <IoMdClose className="w-5/6 h-5/6 " />
           </Button>
         </div>
-        <div className="h-screen_4/6 overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col bg-gray-100 dark:bg-[#14141a] p-2 rounded-md 
+        <div className="h-screen_4/6 overflow-y-scroll border border-[#545e7b]
+         mt-4 no-scrollbar flex flex-col bg-gray-100 dark:bg-[#14141a] p-2 rounded-md 
         dark:text-white text-black place-content-center">
-            <div className="flex flex-col lg:flex-row items-center">
-              <div className="flex flex-col gap-5">
-                <div>
-                  <div className="text-center text-xl font-bold uppercase">
-                    <FormattedMessage id="student.Image" />
-                  </div>
-                  <div>
-                    <User className="w-80 h-80" />
-                  </div>
-                </div>
+              <div className="h-screen_3/5 w- border py-5 mt-4 flex flex-col items-center
+               bg-white dark:bg-[#20202a] rounded-md text-black 
+               place-content-center">
+                {
+                    traverse(data, isEditing)
+                }
               </div>
-              <div className="h-screen_3/5 border py-5 mt-4 flex flex-col items-center bg-white dark:bg-[#20202a] rounded-md text-black place-content-center">
-              {
-                  traverse(data, isEditing)
-              }
-              </div>
-          </div>
         </div>
 
         <div className="w-full flex">
