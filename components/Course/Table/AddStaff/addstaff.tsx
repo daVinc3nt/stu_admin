@@ -302,7 +302,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                       placeholder={intl.formatMessage({
                         id: "course.major",
                       })}
-                      value={SelectedOption.label}
+                      value={(SelectedOption as any).label}
                       onChange={(option) =>{ 
                         handleSelect
                       }}
