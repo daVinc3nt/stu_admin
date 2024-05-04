@@ -9,8 +9,8 @@ import {
 
 interface CustomDropdownProps {
   label: string;
-  options: string[];
-  selectedOption: string;
+  options: any[];
+  selectedOption: any;
   onSelectOption: (option: string) => void;
 }
 

@@ -133,6 +133,7 @@
     "course.SearchBox":"Find by course name",
     "course.cannotEdit": "Non-Editable Information",
     "course.innfomation":"Course Information",
+    "course.class":"Add class",
     "student.program": "Program",
     "student.admission": "Admission date",
     "student.contact_email": "Contact email",

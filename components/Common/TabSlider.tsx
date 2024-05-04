@@ -1,15 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-
-let allTabs = [
-    {
-      id: "home",
-      name: "Tất cả",
-    },
-    {
-      id: "blog",
-      name: "Đang xử lý",
-    },
-  ];
   interface CustomDropdownProps {
     allTabs: any
     onSelectOption: (option: any) => void;

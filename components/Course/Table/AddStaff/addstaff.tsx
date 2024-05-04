@@ -7,8 +7,12 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 import { FormattedMessage, useIntl } from "react-intl";
 import PasswordToggle from "./PasswordToggle";
 import { AdministrativeOperation, CreatingStaffByAdminInfo, CreatingStaffByAgencyInfo, StaffsOperation } from "@/TDLib/tdlogistics";
-import { CreatingStudentInfo, StudentOperation, token } from "@/ambLib/amb";
+import { CreatingCourseInfo, CourseOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie"
+import Select from "react-select"
+import { TabSlider } from "@/components/Common/TabSlider";
+import MultiValue from "react-select/dist/declarations/src/components/MultiValue";
+import { useTheme } from "next-themes";
 interface AddStaffProps {
   onClose: () => void;
   reload: any;
@@ -25,6 +29,10 @@ interface District {
   Name: string;
   Wards: Ward[];
 }
+interface MajorOption {
+  value: string;
+  label: string;
+}
 
 interface Ward {
   Id: string;
@@ -38,77 +46,47 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-  const major = [
-    "Kỹ thuật Điện",
-    "Kỹ thuật Điện tử - Viễn thông",
-    "Kỹ thuật Điều khiển và Tự động hóa",
-    "Kỹ thuật Y sinh",
-    "Công nghệ Nano",
-    "Kỹ thuật Cơ khí",
-    "Kỹ thuật Ô tô",
-    "Kỹ thuật Hàng không",
-    "Kỹ thuật Đóng tàu",
-    "Kỹ thuật Năng lượng",
-    "Khoa học Máy tính",
-    "Kỹ thuật Phần mềm",
-    "Kỹ thuật Hệ thống Máy tính",
-    "Kỹ thuật Mạng Máy tính",
-    "Trí tuệ nhân tạo",
-    "Kỹ thuật Hóa học",
-    "Công nghệ Hóa học",
-    "Khoa học Vật liệu",
-    "Kỹ thuật Hóa sinh",
-    "Kỹ thuật Môi trường",
-    "Kỹ thuật Xây dựng",
-    "Kỹ thuật Cầu đường",
-    "Kỹ thuật Giao thông vận tải",
-    "Kỹ thuật Thủy lợi",
-    "Quy hoạch Đô thị và Kỹ thuật Hạ tầng",
-    "Vật lý",
-    "Kỹ thuật Vật lý",
-    "Khoa học Vật liệu",
-    "Nano",
-    "Năng lượng Mặt trời",
-    "Kỹ thuật Dầu khí",
-    "Kỹ thuật Địa chất",
-    "Kỹ thuật Xử lý Khí",
-    "Kỹ thuật An toàn Mỏ",
-    "Kinh tế Dầu khí",
-    "Kỹ thuật Dệt may",
-    "Thiết kế Thời trang",
-    "Công nghệ Dệt",
-    "Kỹ thuật May",
-    "Quản lý Chất lượng Dệt may",
-    "Kỹ thuật Y sinh",
-    "Kỹ thuật Y sinh Điện tử",
-    "Kỹ thuật Y sinh Vật liệu",
-    "Kỹ thuật Y sinh Cơ học",
-    "Kỹ thuật Hình ảnh Y tế",
-    "Quản lý Công nghiệp",
-    "Quản trị Kinh doanh",
-    "Kỹ thuật Hệ thống Công nghiệp",
-    "Kỹ thuật Logistics và Quản lý Chuỗi cung ứng",
-    "Kỹ thuật Tài chính",
-    "Tiếng Anh",
-    "Tiếng Pháp",
-    "Tiếng Nhật",
-    "Tiếng Hàn",
-    "Tiếng Trung",
-    "Giáo dục Thể chất",
-    "Huấn luyện Thể thao",
-    "Y học Thể thao",
-    "Quản lý Thể dục Thể thao",
-    "Quản trị Kinh doanh",
-    "Kế toán",
-    "Tài chính - Ngân hàng",
-    "Kinh tế Quốc tế",
-    "Marketing",
-    "Xã hội học",
-    "Tâm lý học",
-    "Ngôn ngữ học",
-    "Văn học",
-    "Lịch sử",
-  ];
+  const major =[
+    { value: "Kỹ thuật Điện", label: "Kỹ thuật Điện" },
+    { value: "Kỹ thuật Điện tử - Viễn thông", label: "Kỹ thuật Điện tử - Viễn thông" },
+    { value: "Kỹ thuật Điều khiển và Tự động hóa", label: "Kỹ thuật Điều khiển và Tự động hóa" },
+    { value: "Kỹ thuật Y sinh", label: "Kỹ thuật Y sinh" },
+    { value: "Công nghệ Nano", label: "Công nghệ Nano" },
+    { value: "Kỹ thuật Cơ khí", label: "Kỹ thuật Cơ khí" },
+    { value: "Kỹ thuật Ô tô", label: "Kỹ thuật Ô tô" },
+    { value: "Kỹ thuật Hàng không", label: "Kỹ thuật Hàng không" },
+    { value: "Kỹ thuật Đóng tàu", label: "Kỹ thuật Đóng tàu" },
+    { value: "Kỹ thuật Năng lượng", label: "Kỹ thuật Năng lượng" },
+    { value: "Khoa học Máy tính", label: "Khoa học Máy tính" },
+    { value: "Kỹ thuật Phần mềm", label: "Kỹ thuật Phần mềm" },
+    { value: "Kỹ thuật Hệ thống Máy tính", label: "Kỹ thuật Hệ thống Máy tính" },
+    { value: "Kỹ thuật Mạng Máy tính", label: "Kỹ thuật Mạng Máy tính" },
+    { value: "Trí tuệ nhân tạo", label: "Trí tuệ nhân tạo" },
+    { value: "Kỹ thuật Hóa học", label: "Kỹ thuật Hóa học" },
+    { value: "Công nghệ Hóa học", label: "Công nghệ Hóa học" },
+    { value: "Khoa học Vật liệu", label: "Khoa học Vật liệu" },
+    { value: "Kỹ thuật Hóa sinh", label: "Kỹ thuật Hóa sinh" },
+    { value: "Kỹ thuật Môi trường", label: "Kỹ thuật Môi trường" },
+    { value: "Kỹ thuật Xây dựng", label: "Kỹ thuật Xây dựng" },
+    { value: "Kỹ thuật Cầu đường", label: "Kỹ thuật Cầu đường" },
+    { value: "Kỹ thuật Giao thông vận tải", label: "Kỹ thuật Giao thông vận tải" },
+    { value: "Kỹ thuật Thủy lợi", label: "Kỹ thuật Thủy lợi" },
+    { value: "Quy hoạch Đô thị và Kỹ thuật Hạ tầng", label: "Quy hoạch Đô thị và Kỹ thuật Hạ tầng" },
+    { value: "Vật lý", label: "Vật lý" },
+    { value: "Kỹ thuật Vật lý", label: "Kỹ thuật Vật lý" },
+    { value: "Khoa học Vật liệu", label: "Khoa học Vật liệu" },
+    { value: "Nano", label: "Nano" },
+    { value: "Năng lượng Mặt trời", label: "Năng lượng Mặt trời" },
+    { value: "Kỹ thuật Dầu khí", label: "Kỹ thuật Dầu khí" },
+    { value: "Kỹ thuật Địa chất", label: "Kỹ thuật Địa chất" },
+    { value: "Kỹ thuật Xử lý Khí", label: "Kỹ thuật Xử lý Khí" },
+    { value: "Kỹ thuật An toàn Mỏ", label: "Kỹ thuật An toàn Mỏ" },
+    { value: "Kinh tế Dầu khí", label: "Kinh tế Dầu khí" },
+    { value: "Kỹ thuật Dệt may", label: "Kỹ thuật Dệt may" },
+    { value: "Thiết kế Thời trang", label: "Thiết kế Thời trang" },
+    { value: "Công nghệ Dệt", label: "Công nghệ Dệt" },
+    { value: "Kỹ thuật May", label: "Kỹ thuật May" }
+  ] ;
   const program = ["CQ", "CLC", "VHVL"]
   const faculty = [
     "ME",
@@ -132,24 +110,31 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   const [isShaking, setIsShaking] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
+  const [SelectedOption,setSelectedOption]= useState([{value: "", label: "chọn ngành"}]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [type, setType] = useState();
   const intl = useIntl();
+  const { systemTheme, theme, setTheme } = useTheme();
+  const course_type = [
+    "Đại cương",
+    "GDTC",
+    "GDQP",
+    "Ngoại ngữ",
+    "Nhập môn",
+    "Quản lý",
+    "Cơ sở",
+    "Chuyên ngành"
+  ];
   const initialData = {
-    fullname: "",                 
-    date_of_birth: "",                                     
-    gender: "",                               
-    credential_id: "",               
-    phone_number: "",                  
-    contact_email: "",     
-    address: "",                                            
-    class: "",                           
-    faculty: "",    
-    major: "",                  
-    level: "",                            
-    program: "",    
+    course_name: "",
+    credits: 0,
+    course_type: "",
+    major: [],
+    faculty: "",
+    course_condition: [], // Assuming this can be an array of any type
+    student_condition: 0
   }
-  const [Studentdata, setStudentdata] = useState<CreatingStudentInfo>(initialData);
+  const [coursedata, setcoursedata] = useState<CreatingCourseInfo>(initialData);
   const handleClickOutside = (event: MouseEvent) => {
     if (
       notificationRef.current &&
@@ -180,13 +165,17 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   };
 
   const handleInputChange = (key: string, value: any) => {
-    setStudentdata((prevState) => ({
+    setcoursedata((prevState) => ({
       ...prevState,
       [key]: value,
     }));
   };
 
-
+  const handleSelect = (selectedOption) => {
+    setSelectedOption(selectedOption);
+  };
+  useEffect(() =>
+    console.log(SelectedOption),[SelectedOption])
   // A function to handle the password input change
 
   // A function to handle the confirm password input change
@@ -214,44 +203,15 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
       [key]: value,
     }));
   };
-  const [error, setError] = useState("");
-  // const handleConfirm = async () => {
-  //   const Order = new OrdersOperation();
-  //   const condition: UploadingOrderFileCondition = {
-  //     file: selectedFile,
-  //   };
-  //   console.log(condition);
-  //   try {
-  //     const checkfile = await Order.checkFileFormat(condition);
-  //     console.log(checkfile);
-  //     if (checkfile.error.error) {
-  //       alert(checkfile.error.message);
-  //       setSelectedFile(null);
-  //       return;
-  //     }
-  //     if (checkfile.valid === false) {
-  //       alert(checkfile.message);
-  //       setSelectedFile(null);
-  //       return;
-  //     }
-  //     const response = await Order.createByFile(condition);
-  //     console.log(response);
-  //     alert(response.message);
-  //     setSelectedFile(null);
-  //     reload();
-  //   } catch (e) {
-  //     console.log(e);
-  //     alert("Đã xảy ra lỗi hệ thống, vui lòng thử lại sau!");
-  //   }
-  // };
+
 
   const handleSubmit = async () => {
     const myToken: token = {
       token: cookie.get("token"),
     };
-    const student =new StudentOperation()
-    console.log(Studentdata)
-    const response= await student.create(Studentdata, myToken)
+    const course =new CourseOperation()
+    console.log(coursedata)
+    const response= await course.create(coursedata, myToken)
     console.log(response.error.error)
     if (response.error && response.error?.error)
       {
@@ -259,7 +219,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
         return;
       }
     alert(response.message);
-    setStudentdata(initialData)  
+    setcoursedata(initialData)  
     reload();
   };
 
@@ -296,150 +256,165 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
           </Button>
         </div>
         <div>
-          <div className="h-fit overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
-            <div className="w-fit h-fit">
-              <h1 className="font-semibold pb-2 text-center">
-                <FormattedMessage id="student" />
-              </h1>
-              <div className="flex flex-col gap-3">
+          <div className="h-full w-full overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
+            <div className="w-full h-fit p-4 flex flex-col gap-2 items-center justify-center">
+              <TabSlider
+              allTabs={[
+                {
+                  id: "1",
+                  name: <FormattedMessage id="course.add1" />,
+                  status: "",
+                },
+                {
+                  id: "2",
+                  name: <FormattedMessage id="course.class" />,
+                  status: 2,
+                },
+              ]}
+              onSelectOption={(value) => {
+                ;
+              }}
+              />
+              <div>
+                <div className="flex flex-col gap-3">
                 <input
-                  type="string"
-                  className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.fullname ? "border-red-500" : ""}`}
-                  placeholder={intl.formatMessage({
-                    id: "student.fullname",
-                  })}
-                  value={Studentdata.fullname}
-                  onChange={(e) => handleInputChange("fullname", e.target.value)}
-                />
-
-                <input
-                  type="string"
-                  className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.phone_number ? "border-red-500" : ""}`}
-                  placeholder={intl.formatMessage({
-                    id: "student.phone_number",
-                  })}
-                  value={Studentdata.phone_number}
-                  onChange={(e) => handleInputChange("phone_number", e.target.value)}
-                />
+                    type="text"
+                    className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
+                    ${checkmissing.fullname ? "border-red-500" : ""}`}
+                    placeholder={intl.formatMessage({
+                      id: "course.course_name",
+                    })}
+                    value={coursedata.course_name}
+                    onChange={(e) => handleInputChange("course_name", e.target.value)}
+                  />
+                  <input
+                    type="number"
+                    className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
+                    ${checkmissing.fullname ? "border-red-500" : ""}`}
+                    placeholder={intl.formatMessage({
+                      id: "course.credits",
+                    })}
+                    value={coursedata.credits ?coursedata.credits:"" }
+                    onChange={(e) => {handleInputChange("credits", e.target.value)}}
+                  />
+                  <Select
+                      id="major"
+                      placeholder={intl.formatMessage({
+                        id: "course.major",
+                      })}
+                      value={SelectedOption.label}
+                      onChange={(option) =>{ 
+                        handleSelect
+                      }}
+                      aria-label=".form-select-sm"
+                      isSearchable
+                      options={major}
+                      className={`text-xs fixed z-50 md:text-sm text-black border border-gray-600 rounded-md focus:outline-none w-full  text-center `}
+                      isMulti={true}
+                      styles={{
+                        control: (provided, state) => ({
+                          ...provided,
+                          backgroundColor: "transparent",
+                          border: "none",
+                          boxShadow: state.isFocused
+                            ? "none"
+                            : provided.boxShadow,
+                          "&:hover": {
+                            border: "none",
+                          },
+                          color: "#4a5568",
+                        }),
+                        placeholder: (provided) => ({
+                          ...provided,
+                          color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                          fontSize: "0.875rem",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }),
+                        input: (provided) => ({
+                          ...provided,
+                          color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }),
+                        clearIndicator: (provided) => ({
+                          ...provided,
+                          color: theme === "dark" ? "#D1D5DB" : "#374151",
+                        }),
+                        singleValue: (provided) => ({
+                          ...provided,
+                          backgroundColor: "transparent",
+                          color: theme === "dark" ? "#D1D5DB" : "#374151",
+                          marginTop: "2px",
+                        }),
+                        menu: (provided) => ({
+                          ...provided,
+                          backgroundColor:
+                            theme === "dark" ? "#0B1437" : "#FFFFFF",
+                        }),
+                        menuList: (provided) => ({
+                          ...provided,
+                          backgroundColor: "transparent",
+                          color: theme === "dark" ? "#ffffff" : "#374151",
+                          marginTop: "2px",
+                        }),
+                        option: (
+                          styles,
+                          { data, isDisabled, isFocused, isSelected }
+                        ) => {
+                          return {
+                            ...styles,
+                            backgroundColor: isFocused
+                              ? theme === "dark"
+                                ? "#707EAE"
+                                : "#d1d5db"
+                              : "transparent",
+                          };
+                        },
+                        container: (provided, state) => ({
+                          ...provided,
+                          color: "#4a5568",
+                        }),
+                      }}
+                    />
+                </div>          
+                <div className="flex gap-3 mt-3">
+                  <div
+                    className={`text-xs text-center md:text-sm border border-gray-600 rounded  bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
+                    ${checkmissing.role ? "border-red-500" : ""}`}
+                  >
+                    <CustomDropdown
+                      label={intl.formatMessage({ id: "course.course_type" })}
+                      options={course_type}
+                      selectedOption={coursedata.course_type}
+                      onSelectOption={(option) => handleInputChange("course_type", option)}
+                    />
+                  </div>
+                  <div
+                    className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
+                    ${checkmissing.role ? "border-red-500" : ""}`}
+                  >
+                    <CustomDropdown
+                      label={intl.formatMessage({ id: "course.faculty" })}
+                      options={faculty}
+                      selectedOption={coursedata.faculty}
+                      onSelectOption={(option) => handleInputChange("faculty", option)}
+                    />
+                  </div>
+                  <div
+                    className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
+                    ${checkmissing.role ? "border-red-500" : ""}`}
+                  >
+                    <CustomDropdown
+                      label={intl.formatMessage({ id: "course.student_condition" })}
+                      options={[1, 2, 3, 4]}
+                      selectedOption={coursedata.student_condition}
+                      onSelectOption={(option) => handleInputChange("student_condition", option)}
+                    />
+                  </div>               
+                </div>
               </div>
-
-              <div className="flex gap-3 mt-3">
-                <input 
-                  type="date"
-                  className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.date_of_birth ? "border-red-500" : ""}`}
-                  placeholder={intl.formatMessage({
-                    id: "student.date_of_birth",
-                  })}
-                  value={Studentdata.date_of_birth}
-                  onChange={(e) =>
-                    handleInputChange("date_of_birth", e.target.value)
-                  }
-                />
-                <input
-                  type="text"
-                  className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.cccd ? "border-red-500" : ""}`}
-                  placeholder={intl.formatMessage({
-                    id: "student.credential_id",
-                  })}
-                  value={Studentdata.credential_id}
-                  onChange={(e) => handleInputChange("credential_id", e.target.value)}
-                />
-                <input
-                  type="text"
-                  className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.email ? "border-red-500" : ""}`}
-                  placeholder="Email"
-                  value={Studentdata.contact_email}
-                  onChange={(e) => handleInputChange("contact_email", e.target.value)}
-                />
-                
-              </div>
-              <div className="flex gap-3 mt-3">
-                <input
-                  type="text"
-                  className={`text-xs md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.cccd ? "border-red-500" : ""}`}
-                  placeholder={intl.formatMessage({
-                    id: "student.class",
-                  })}
-                  value={Studentdata.class}
-                  onChange={(e) => handleInputChange("class", e.target.value)}
-                />
-                <input
-                  type="text"
-                  className={`text-xs md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.detail_address ? "border-red-500" : ""}`}
-                  placeholder={intl.formatMessage({
-                    id: "student.address",
-                  })}
-                  value={Studentdata.address}
-                  onChange={(e) =>
-                    handleInputChange("address", e.target.value)
-                  }
-                />
-              </div>             
-              <div className="flex gap-3 mt-3">
-                <div
-                  className={`text-xs text-center md:text-sm border border-gray-600 rounded  bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
-                  ${checkmissing.role ? "border-red-500" : ""}`}
-                >
-                  <CustomDropdown
-                    label={intl.formatMessage({ id: "student.gender" })}
-                    options={["Nam", "Nữ"]}
-                    selectedOption={Studentdata.gender}
-                    onSelectOption={(option) => handleInputChange("gender", option)}
-                  />
-                </div>
-                <div
-                  className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
-                  ${checkmissing.role ? "border-red-500" : ""}`}
-                >
-                  <CustomDropdown
-                    label={intl.formatMessage({ id: "student.program" })}
-                    options={program}
-                    selectedOption={Studentdata.program}
-                    onSelectOption={(option) => handleInputChange("program", option)}
-                  />
-                </div>
-                <div
-                  className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
-                  ${checkmissing.role ? "border-red-500" : ""}`}
-                >
-                  <CustomDropdown
-                    label={intl.formatMessage({ id: "student.faculty" })}
-                    options={faculty}
-                    selectedOption={Studentdata.faculty}
-                    onSelectOption={(option) => handleInputChange("faculty", option)}
-                  />
-                </div>
-                <div
-                  className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.role ? "border-red-500" : ""}`}
-                >
-                  <CustomDropdown
-                    label={intl.formatMessage({ id: "student.level" })}
-                    options={["Đại học", "Cao học"]}
-                    selectedOption={Studentdata.level}
-                    onSelectOption={(option) => handleInputChange("level", option)}
-                  />
-                </div>               
-              </div>
-                <div
-                  className={`text-xs mt-3 text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
-                  ${checkmissing.role ? "border-red-500" : ""}`}
-                >
-                  <CustomDropdown
-                    label={intl.formatMessage({ id: "student.major" })}
-                    options={major}
-                    selectedOption={Studentdata.major}
-                    onSelectOption={(option) => handleInputChange("major", option)}
-                  />
-                </div>
-              
               
             </div>
           </div>
@@ -452,9 +427,6 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
               <FormattedMessage id="Staff.AddButton" />
             </span>
           </Button>
-        </div>
-        <div className=" flex place-content-center text-red-500 font-bold ">
-          {error && <p>{error}</p>}
         </div>
       </motion.div>
     </motion.div>
