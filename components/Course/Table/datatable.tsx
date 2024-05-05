@@ -40,6 +40,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import BasicPopover from "@/components/Common/Popover";
 import { DeletingStaffCondition, StaffsOperation } from "@/TDLib/tdlogistics";
 import { CourseID, CourseOperation, token } from "@/ambLib/amb";
+import AddStaff1 from "./AddStaff/addstaff1";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -92,9 +93,14 @@ export function DataTable<TData, TValue>({
   const openModal = () => {
     setModalIsOpen(true);
   };
-
+  const openModal2 = () => {
+    setModalIsOpen2(true);
+  };
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+  const closeModal2 = () => {
+    setModalIsOpen2(false);
   };
   const paginationButtons = [];
   for (let i = 0; i < table.getPageCount(); i++) {
@@ -218,8 +224,15 @@ export function DataTable<TData, TValue>({
             >
               <FormattedMessage id="course.add1" />
             </Button>
+
+            <Button
+              className="text-xs md:text-base border border-gray-600 rounded ml-2 w-36 h-10 text-center"
+              onClick={openModal2}
+            >
+              <FormattedMessage id="Class.AddButton" />
+            </Button>
               {modalIsOpen &&<AddStaff onClose={closeModal} reload={reload}/>}
-            
+              {modalIsOpen2 &&<AddStaff1 onClose={closeModal2} reload={reload}/>}
           </div>
         </div>
       </div>

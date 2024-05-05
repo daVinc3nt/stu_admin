@@ -13,6 +13,7 @@ import Select from "react-select"
 import { TabSlider } from "@/components/Common/TabSlider";
 import MultiValue from "react-select/dist/declarations/src/components/MultiValue";
 import { useTheme } from "next-themes";
+import { parse } from "node:path/posix";
 interface AddStaffProps {
   onClose: () => void;
   reload: any;
@@ -110,7 +111,9 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   const [isShaking, setIsShaking] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
-  const [SelectedOption,setSelectedOption]= useState([{value: "", label: "chọn ngành"}]);
+  const [SelectedOption1,setSelectedOption1]= useState([]);
+  const [SelectedOption2,setSelectedOption2]= useState([]);
+  const [All_course, setAll_course]= useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [type, setType] = useState();
   const intl = useIntl();
@@ -134,6 +137,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     course_condition: [], // Assuming this can be an array of any type
     student_condition: 0
   }
+  const course =new CourseOperation()
   const [coursedata, setcoursedata] = useState<CreatingCourseInfo>(initialData);
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -171,11 +175,13 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     }));
   };
 
-  const handleSelect = (selectedOption) => {
-    setSelectedOption(selectedOption);
+  const handleSelect1 = (selectedOption) => {
+    setSelectedOption1(selectedOption);
   };
-  useEffect(() =>
-    console.log(SelectedOption),[SelectedOption])
+  const handleSelect2 = (selectedOption) => {
+    setSelectedOption2(selectedOption);
+  };
+
   // A function to handle the password input change
 
   // A function to handle the confirm password input change
@@ -209,10 +215,15 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     const myToken: token = {
       token: cookie.get("token"),
     };
-    const course =new CourseOperation()
     console.log(coursedata)
-    const response= await course.create(coursedata, myToken)
-    console.log(response.error.error)
+    const response= await course.create(
+      {
+        ...coursedata, 
+        major: SelectedOption1.map(option => option.value),  
+        course_condition: SelectedOption2.map(option => option.value)
+      }
+      , myToken)
+
     if (response.error && response.error?.error)
       {
         alert(response.error.message);
@@ -223,6 +234,20 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     reload();
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const myToken: token = {
+        token: cookie.get("token"),
+      };
+      const res = await course.findAllCourses({},myToken)
+      setAll_course(res.data?.map((ele) => ({
+        value: ele.course_id,
+        label: ele.course_name,
+      })));
+    }
+    fetchData();
+    
+  }, []);
   return (
     
     <motion.div
@@ -236,7 +261,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     >
       <motion.div
         ref={notificationRef}
-        className={`relative w-[98%] sm:w-9/12 lg:w-1/2 bg-white dark:bg-[#14141a] rounded-xl p-4 overflow-y-auto ${
+        className={`relative w-[98%] sm:w-9/12  h-screen_4/5 lg:w-1/2 bg-white dark:bg-[#14141a] rounded-xl p-4 overflow-y-hidden ${
           isShaking ? "animate-shake" : ""
         }`}
         initial={{ scale: 0 }}
@@ -244,7 +269,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
         exit={{ scale: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="relative items-center justify-center flex-col flex h-10 w-full border-b-2 border-[#545e7b]">
+        <div className="relative items-center  justify-center flex-col flex h-10 w-full border-b-2 border-[#545e7b]">
           <div className="font-bold text-lg sm:text-2xl pb-2 text-white w-full text-center">
             <FormattedMessage id="Staff.AddButton" />
           </div>
@@ -255,29 +280,11 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
             <IoMdClose className="w-5/6 h-5/6" />
           </Button>
         </div>
-        <div>
-          <div className="h-full w-full overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
-            <div className="w-full h-fit p-4 flex flex-col gap-2 items-center justify-center">
-              <TabSlider
-              allTabs={[
-                {
-                  id: "1",
-                  name: <FormattedMessage id="course.add1" />,
-                  status: "",
-                },
-                {
-                  id: "2",
-                  name: <FormattedMessage id="course.class" />,
-                  status: 2,
-                },
-              ]}
-              onSelectOption={(value) => {
-                ;
-              }}
-              />
-              <div>
-                <div className="flex flex-col gap-3">
-                <input
+        <div className="w-full h-4/5 overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
+          <div className="w-full p-4 flex flex-col gap-2 items-center justify-center">
+              <div className="flex w-full flex-col gap-3">
+              <div className="flex gap-5">
+                  <input
                     type="text"
                     className={`text-xs md:text-sm border border-gray-600 rounded  bg-white dark:bg-[#14141a] h-10 p-2 w-full
                     ${checkmissing.fullname ? "border-red-500" : ""}`}
@@ -295,139 +302,222 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                       id: "course.credits",
                     })}
                     value={coursedata.credits ?coursedata.credits:"" }
-                    onChange={(e) => {handleInputChange("credits", e.target.value)}}
+                    onChange={(e) => {handleInputChange("credits", parseInt(e.target.value))}}
                   />
-                  <Select
-                      id="major"
-                      placeholder={intl.formatMessage({
-                        id: "course.major",
-                      })}
-                      value={(SelectedOption as any).label}
-                      onChange={(option) =>{ 
-                        handleSelect
-                      }}
-                      aria-label=".form-select-sm"
-                      isSearchable
-                      options={major}
-                      className={`text-xs fixed z-50 md:text-sm text-black border border-gray-600 rounded-md focus:outline-none w-full  text-center `}
-                      isMulti={true}
-                      styles={{
-                        control: (provided, state) => ({
-                          ...provided,
-                          backgroundColor: "transparent",
-                          border: "none",
-                          boxShadow: state.isFocused
-                            ? "none"
-                            : provided.boxShadow,
-                          "&:hover": {
-                            border: "none",
-                          },
-                          color: "#4a5568",
-                        }),
-                        placeholder: (provided) => ({
-                          ...provided,
-                          color: theme == "dark" ? "#a0aec0" : "#a0aec0",
-                          fontSize: "0.875rem",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }),
-                        input: (provided) => ({
-                          ...provided,
-                          color: theme == "dark" ? "#a0aec0" : "#a0aec0",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }),
-                        clearIndicator: (provided) => ({
-                          ...provided,
-                          color: theme === "dark" ? "#D1D5DB" : "#374151",
-                        }),
-                        singleValue: (provided) => ({
-                          ...provided,
-                          backgroundColor: "transparent",
-                          color: theme === "dark" ? "#D1D5DB" : "#374151",
-                          marginTop: "2px",
-                        }),
-                        menu: (provided) => ({
-                          ...provided,
-                          backgroundColor:
-                            theme === "dark" ? "#0B1437" : "#FFFFFF",
-                        }),
-                        menuList: (provided) => ({
-                          ...provided,
-                          backgroundColor: "transparent",
-                          color: theme === "dark" ? "#ffffff" : "#374151",
-                          marginTop: "2px",
-                        }),
-                        option: (
-                          styles,
-                          { data, isDisabled, isFocused, isSelected }
-                        ) => {
-                          return {
-                            ...styles,
-                            backgroundColor: isFocused
-                              ? theme === "dark"
-                                ? "#707EAE"
-                                : "#d1d5db"
-                              : "transparent",
-                          };
-                        },
-                        container: (provided, state) => ({
-                          ...provided,
-                          color: "#4a5568",
-                        }),
-                      }}
-                    />
-                </div>          
-                <div className="flex gap-3 mt-3">
-                  <div
-                    className={`text-xs text-center md:text-sm border border-gray-600 rounded  bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
-                    ${checkmissing.role ? "border-red-500" : ""}`}
-                  >
-                    <CustomDropdown
-                      label={intl.formatMessage({ id: "course.course_type" })}
-                      options={course_type}
-                      selectedOption={coursedata.course_type}
-                      onSelectOption={(option) => handleInputChange("course_type", option)}
-                    />
-                  </div>
-                  <div
-                    className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-fit
-                    ${checkmissing.role ? "border-red-500" : ""}`}
-                  >
-                    <CustomDropdown
-                      label={intl.formatMessage({ id: "course.faculty" })}
-                      options={faculty}
-                      selectedOption={coursedata.faculty}
-                      onSelectOption={(option) => handleInputChange("faculty", option)}
-                    />
-                  </div>
-                  <div
-                    className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
-                    ${checkmissing.role ? "border-red-500" : ""}`}
-                  >
-                    <CustomDropdown
-                      label={intl.formatMessage({ id: "course.student_condition" })}
-                      options={[1, 2, 3, 4]}
-                      selectedOption={coursedata.student_condition}
-                      onSelectOption={(option) => handleInputChange("student_condition", option)}
-                    />
-                  </div>               
                 </div>
+                <Select
+                    id="major"
+                    placeholder={intl.formatMessage({
+                      id: "course.major",
+                    })}
+                    value={(SelectedOption1 as any).label}
+                    onChange={(option) =>{ 
+                      handleSelect1(option)
+                    }}
+                    aria-label=".form-select-sm"
+                    isSearchable
+                    options={major}
+                    className={`text-xs z-50 md:text-sm text-black border border-gray-600 rounded-md focus:outline-none w-full  text-center `}
+                    isMulti={true}
+                    styles={{
+                      control: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        border: "none",
+                        boxShadow: state.isFocused
+                          ? "none"
+                          : provided.boxShadow,
+                        "&:hover": {
+                          border: "none",
+                        },
+                        color: "#4a5568",
+                      }),
+                      placeholder: (provided) => ({
+                        ...provided,
+                        color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                        fontSize: "0.875rem",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }),
+                      input: (provided) => ({
+                        ...provided,
+                        color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }),
+                      clearIndicator: (provided) => ({
+                        ...provided,
+                        color: theme === "dark" ? "#D1D5DB" : "#374151",
+                      }),
+                      singleValue: (provided) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        color: theme === "dark" ? "#D1D5DB" : "#374151",
+                        marginTop: "2px",
+                      }),
+                      menu: (provided) => ({
+                        ...provided,
+                        backgroundColor:
+                          theme === "dark" ? "#0B1437" : "#FFFFFF",
+                      }),
+                      menuList: (provided) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        color: theme === "dark" ? "#ffffff" : "#374151",
+                        marginTop: "2px",
+                      }),
+                      option: (
+                        styles,
+                        { data, isDisabled, isFocused, isSelected }
+                      ) => {
+                        return {
+                          ...styles,
+                          backgroundColor: isFocused
+                            ? theme === "dark"
+                              ? "#707EAE"
+                              : "#d1d5db"
+                            : "transparent",
+                        };
+                      },
+                      container: (provided, state) => ({
+                        ...provided,
+                        color: "#4a5568",
+                      }),
+                    }}
+                  />
+                   <Select
+                    id="course_condition"
+                    placeholder={intl.formatMessage({
+                      id: "course.course_condition",
+                    })}
+                    value={(SelectedOption2 as any).label}
+                    onChange={(option) =>{ 
+                      handleSelect2(option)
+                    }}
+                    aria-label=".form-select-sm"
+                    isSearchable
+                    options={All_course}
+                    className={`text-xs z-40 md:text-sm text-black border border-gray-600 rounded-md focus:outline-none w-full  text-center `}
+                    isMulti={true}
+                    styles={{
+                      control: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        border: "none",
+                        boxShadow: state.isFocused
+                          ? "none"
+                          : provided.boxShadow,
+                        "&:hover": {
+                          border: "none",
+                        },
+                        color: "#4a5568",
+                      }),
+                      placeholder: (provided) => ({
+                        ...provided,
+                        color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                        fontSize: "0.875rem",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }),
+                      input: (provided) => ({
+                        ...provided,
+                        color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }),
+                      clearIndicator: (provided) => ({
+                        ...provided,
+                        color: theme === "dark" ? "#D1D5DB" : "#374151",
+                      }),
+                      singleValue: (provided) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        color: theme === "dark" ? "#D1D5DB" : "#374151",
+                        marginTop: "2px",
+                      }),
+                      menu: (provided) => ({
+                        ...provided,
+                        backgroundColor:
+                          theme === "dark" ? "#0B1437" : "#FFFFFF",
+                      }),
+                      menuList: (provided) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        color: theme === "dark" ? "#ffffff" : "#374151",
+                        marginTop: "2px",
+                      }),
+                      option: (
+                        styles,
+                        { data, isDisabled, isFocused, isSelected }
+                      ) => {
+                        return {
+                          ...styles,
+                          backgroundColor: isFocused
+                            ? theme === "dark"
+                              ? "#707EAE"
+                              : "#d1d5db"
+                            : "transparent",
+                        };
+                      },
+                      container: (provided, state) => ({
+                        ...provided,
+                        color: "#4a5568",
+                      }),
+                    }}
+                  />
+              </div>          
+              <div className="flex w-full gap-3 mt-3">
+                <div
+                  className={`text-xs text-center md:text-sm border border-gray-600 rounded  bg-white  dark:bg-[#14141a] h-10 p-2 w-full
+                  ${checkmissing.role ? "border-red-500" : ""}`}
+                >
+                  <CustomDropdown
+                    label={intl.formatMessage({ id: "course.course_type" })}
+                    options={course_type}
+                    selectedOption={coursedata.course_type}
+                    onSelectOption={(option) => handleInputChange("course_type", option)}
+                  />
+                </div>
+                <div
+                  className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
+                  ${checkmissing.role ? "border-red-500" : ""}`}
+                >
+                  <CustomDropdown
+                    label={intl.formatMessage({ id: "course.faculty" })}
+                    options={faculty}
+                    selectedOption={coursedata.faculty}
+                    onSelectOption={(option) => handleInputChange("faculty", option)}
+                  />
+                </div>
+                <div
+                  className={`text-xs text-center md:text-sm border border-gray-600 rounded bg-white  dark:bg-[#14141a] h-10 p-2 w-full
+                  ${checkmissing.role ? "border-red-500" : ""}`}
+                >
+                  <CustomDropdown
+                    label={intl.formatMessage({ id: "course.student_condition" })}
+                    options={[1, 2, 3, 4]}
+                    selectedOption={coursedata.student_condition}
+                    onSelectOption={(option) => handleInputChange("student_condition", option)}
+                  />
+                </div>               
               </div>
-              
-            </div>
+
+        
           </div>
-          <Button
-            className="w-full rounded-lg mt-5 mb-1 py-3 border-green-700 hover:bg-green-700 text-green-500
-          bg-transparent drop-shadow-md hover:drop-shadow-xl hover:text-white border hover:shadow-md"
-            onClick={handleSubmit}
-          >
-            <span className="hidden xs:block">
-              <FormattedMessage id="Staff.AddButton" />
-            </span>
-          </Button>
+
+          
         </div>
+        <Button
+              className="w-full rounded-lg mt-5 mb-1 py-3 border-green-700 hover:bg-green-700 text-green-500
+                  bg-transparent drop-shadow-md hover:drop-shadow-xl hover:text-white border hover:shadow-md"
+              onClick={handleSubmit}
+            >
+              <span className="hidden xs:block">
+                <FormattedMessage id="Staff.AddButton" />
+              </span>
+            </Button>
       </motion.div>
     </motion.div>
   );

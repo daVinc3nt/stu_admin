@@ -130,6 +130,9 @@
     "course.canEdit": "Editable Information",
     "course.detail":"Detail",
     "course.add1":"Add course",
+    "course.major":"Major included",
+    "course.course_condition": "Pre-courses",
+    "course.classChildren":"Classes",
     "course.SearchBox":"Find by course name",
     "course.cannotEdit": "Non-Editable Information",
     "course.innfomation":"Course Information",
@@ -162,5 +165,15 @@
     "Staff.CreateAccount": "Create account",
     "SubmitPopup.Notification": "Notification",
     "SubmitPopup.CancelButton": "Cancel",
-    "SubmitPopup.ConfirmButton": "Confirm"
+    "SubmitPopup.ConfirmButton": "Confirm",
+    "Class.program": "Program",
+    "Class.day": "Day in week",
+    "Class.weeks": "Study week",
+    "Class.AddButton":"Add class",
+    "Class.periods": "Time",
+    "Class.room": "Room",
+    "Class.semester": "Semester",
+    "Class.max_students": "Max students",
+    "Class.course_id": "Which course?"
+
 }

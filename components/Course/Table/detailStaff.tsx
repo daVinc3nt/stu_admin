@@ -7,6 +7,7 @@ import { User, Pencil } from "lucide-react";
 import { FormattedMessage } from "react-intl";
 import { CourseID, CourseOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie";
+import { stepContentClasses } from "@mui/material";
 const KeyCanEdit = [    
   "course_name",
   "credits",
@@ -22,14 +23,14 @@ interface DetailStaffProps {
   dataInitial: any;
   reload: any;
 }
-
+const course =new CourseOperation()
 const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload }) => {
   const [isShaking, setIsShaking] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [data, setData] = useState(dataInitial);
   const [updateData, setupdateData] = useState<any>({});
-
+  const [Classes, setClasses] =useState([]);
   const handleUpdateData =(e, key:string, input:string = "string") => {
     if (input == "number")
       setupdateData({...updateData, [key]: parseInt(e.target.value)});
@@ -57,6 +58,23 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     };
   }, [onClose]);
 
+
+  useEffect(() => {
+    const fetch = async () =>{
+      const myToken: token = {
+        token: cookie.get("token"),
+      };
+      const condition: CourseID = {course_id: dataInitial.course_id }
+      const res = await course.findClasses(condition, myToken)
+      console.log("hello",(res as any).data)
+      if (!res.error)
+        {
+          console.log("hello")
+          setClasses((res as any).data)
+        }
+    }
+    fetch()
+  }, []);
   const handleClose = () => {
     setIsVisible(false);
   };
@@ -77,7 +95,6 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       token: cookie.get("token"),
     };
     const condition: CourseID = {course_id: dataInitial.course_id }
-    const course =new CourseOperation()
     setIsEditing(false);
     await course.update(updateData, condition, myToken )
     reload()
@@ -122,7 +139,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       }
     });
     return (
-      <div className="flex flex-col overflow-y-scroll w-fit no-scrollbar">
+      <div className="flex flex-col w-fit no-scrollbar">
         <div className="text-xl text-black dark:text-white font-bold uppercase text-center">
           <FormattedMessage id="course.canEdit" />
         </div>
@@ -154,7 +171,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     >
       <motion.div
         ref={notificationRef}
-        className={`relative w-fit bg-white dark:bg-[#14141a] h-fit rounded-xl p-4 overflow-y-auto
+        className={`relative w-fit bg-white dark:bg-[#14141a] h-screen rounded-xl p-4
           ${isShaking ? "animate-shake" : ""}`}
         initial={{ scale: 0 }}
         animate={{ scale: isVisible ? 1 : 0 }}
@@ -172,16 +189,35 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
             <IoMdClose className="w-5/6 h-5/6 " />
           </Button>
         </div>
-        <div className="h-screen_4/6 overflow-y-scroll border border-[#545e7b]
+        <div className="h-screen_4/6 border border-[#545e7b]
          mt-4 no-scrollbar flex flex-col bg-gray-100 dark:bg-[#14141a] p-2 rounded-md 
-        dark:text-white text-black place-content-center">
+        dark:text-white text-black place-content-center overflow-y-scroll">
               <div className="h-screen_3/5 w- border py-5 mt-4 flex flex-col items-center
                bg-white dark:bg-[#20202a] rounded-md text-black 
-               place-content-center">
+               place-content-center overflow-y-scroll no-scrollbar">
                 {
                     traverse(data, isEditing)
                 }
-              </div>
+               </div> 
+               <div className="text-xl">
+               <FormattedMessage id="course.classChildren" />
+               </div>
+               <div className="border py-5 mt-4 items-center
+               bg-white dark:bg-[#20202a] h-fit  rounded-md text-black 
+                grid-cols-2 grid lg:grid-cols-3 p-10 gap-4 overflow-y-scroll no-scrollbar">
+               {
+                    Classes.map(
+                    (ele) => {
+                      console.log(ele)
+                      return (
+                        <div className="bg-gray-100 p-3 rounded-xl shadow-inner">
+                          {ele.class_id}
+                        </div>
+                      )
+                    }
+                    )
+                  }
+                </div>  
         </div>
 
         <div className="w-full flex">

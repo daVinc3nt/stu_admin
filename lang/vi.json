@@ -161,6 +161,8 @@
     "course.course_name": "Tên khoá",
     "course.detail":"Detail",
     "course.credits": "Số tín chỉ",
+    "course.course_condition": "Môn tiên quyết",
+    "course.classChildren":"Các lớp con",
     "course.faculty": "Khoa",
     "course.course_id": "Khoá",
     "course.canEdit": "Thông tin có thể thay đổi",
@@ -170,6 +172,7 @@
     "course.add1":"Thêm khoá",
     "course.SearchBox":"Tìm theo tên khoá học",
     "course.class":"Tạo lớp",
+    "course.major":"Bao gồm ngành",
     "Staff.PersonalDetail": "Thông tin cá nhân",
     "Staff.PersonalDetail.Fullname": "Họ và tên",
     "Staff.PersonalDetail.Age": "Tuổi",
@@ -263,5 +266,14 @@
     "Schedule.Search": "Tìm kiếm theo công việc",
     "SubmitPopup.Notification": "Thông báo",
     "SubmitPopup.CancelButton": "Huỷ bỏ",
-    "SubmitPopup.ConfirmButton": "Xác nhận"
+    "SubmitPopup.ConfirmButton": "Xác nhận",
+    "Class.program": "Chương trình",
+    "Class.day": "Ngày trong tuần",
+    "Class.weeks": "Tuần học",
+    "Class.periods": "Thời gian",
+    "Class.room": "Phòng",
+    "Class.semester": "Học kỳ",
+    "Class.max_students": "Lượng học sinh tối đa",
+    "Class.course_id": "Thuộc khoá nào?",
+    "Class.AddButton":"Thêm lớp học"
 }
