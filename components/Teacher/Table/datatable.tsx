@@ -160,7 +160,7 @@ export function DataTable<TData, TValue>({
                     peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2.5 
                     peer-focus:-top-0.5 peer-focus:leading-5 peer-focus:text-blue-500 peer-focus:text-xxs`}
             >
-              <FormattedMessage id="Staff.SearchBox" />
+              <FormattedMessage id="teacher.SearchBox" />
             </label>
             <Dropdown className="z-30">
               <DropdownTrigger>

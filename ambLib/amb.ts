@@ -735,7 +735,7 @@ export interface UpdateScoreInfo {
     midterm: number;
     final: number;
     lab: number;
-    exercise: number;
+    exeercise: number;
 }
 
 

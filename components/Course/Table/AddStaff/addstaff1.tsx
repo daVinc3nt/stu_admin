@@ -81,6 +81,20 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     }
   };
   useEffect(() => {
+    const fetchData = async () => {
+      const myToken: token = {
+        token: cookie.get("token"),
+      };
+      const res = await course.findAllCourses({},myToken)
+      setAll_course(res.data?.map((ele) => ({
+        value: ele.course_id,
+        label: ele.course_name,
+      })));
+    }
+    fetchData();
+    
+  }, []);
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {

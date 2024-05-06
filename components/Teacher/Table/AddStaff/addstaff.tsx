@@ -7,8 +7,10 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 import { FormattedMessage, useIntl } from "react-intl";
 import PasswordToggle from "./PasswordToggle";
 import { AdministrativeOperation, CreatingStaffByAdminInfo, CreatingStaffByAgencyInfo, StaffsOperation } from "@/TDLib/tdlogistics";
-import { CreatingTeacherInfo, TeacherOperation, token } from "@/ambLib/amb";
+import { CourseOperation, CreatingTeacherInfo, TeacherOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie"
+import { useTheme } from "next-themes";
+import Select from "react-select"
 interface AddStaffProps {
   onClose: () => void;
   reload: any;
@@ -35,9 +37,15 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     setType(type);
     setModalIsOpen(true);
   };
+  const [All_course, setAll_course]= useState([]);
+  const [SelectedOption1,setSelectedOption1]= useState([]);
   const closeModal = () => {
     setModalIsOpen(false);
   };
+  const handleSelect1 = (selectedOption) => {
+    setSelectedOption1(selectedOption);
+  };
+  
   const major = [
     "Kỹ thuật Điện",
     "Kỹ thuật Điện tử - Viễn thông",
@@ -135,6 +143,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [type, setType] = useState();
   const intl = useIntl();
+  const { systemTheme, theme, setTheme } = useTheme();
   const initialData = {
     fullname: "",
     gender: "",
@@ -180,6 +189,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
   };
 
   const handleInputChange = (key: string, value: any) => {
+    console.log(teacherdata.subject)
     setteacherdata((prevState) => ({
       ...prevState,
       [key]: value,
@@ -262,6 +272,20 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     setteacherdata(initialData)  
     reload();
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const myToken: token = {
+        token: cookie.get("token"),
+      };
+      const course =new CourseOperation()
+      const res = await course.findAllCourses({},myToken)
+      setAll_course(res.data?.map((ele) => ({
+        value: ele.course_id,
+        label: ele.course_name,
+      })));
+    }
+    fetchData();
+  })
 
   return (
     
@@ -296,8 +320,8 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
           </Button>
         </div>
         <div>
-          <div className="h-fit overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
-            <div className="w-fit h-fit">
+          <div className="h-screen_3/4 overflow-y-scroll border border-[#545e7b] mt-4 no-scrollbar flex flex-col items-center bg-white  dark:bg-[#14141a] p-2 rounded-md text-black dark:text-white">
+            <div className="w-full h-fit">
               <h1 className="font-semibold pb-2 text-center">
                 <FormattedMessage id="teacher.Title" />
               </h1>
@@ -439,8 +463,91 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                     onSelectOption={(option) => handleInputChange("major", option)}
                   />
                 </div>
-              
-              
+                <div className="flex gap-3 mt-3">
+                  <Select
+                    id="Class_condition"
+                    placeholder={intl.formatMessage({
+                      id: "Class.course_id",
+                    })}
+                    value={(SelectedOption1 as any).label}
+                    onChange={(option) =>{ 
+                      handleSelect1(option)
+                      console.log((option as any).value)
+                      handleInputChange("subject", option.map(ele => ele.value))
+                    }}
+                    aria-label=".form-select-sm"
+                    isSearchable
+                    options={All_course}
+                    isMulti={true}
+                    className={`text-xs z-40 md:text-sm text-black border border-gray-600 rounded-md focus:outline-none w-full  text-center `}
+                    styles={{
+                      control: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        border: "none",
+                        boxShadow: state.isFocused
+                          ? "none"
+                          : provided.boxShadow,
+                        "&:hover": {
+                          border: "none",
+                        },
+                        color: "#4a5568",
+                      }),
+                      placeholder: (provided) => ({
+                        ...provided,
+                        color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                        fontSize: "0.875rem",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }),
+                      input: (provided) => ({
+                        ...provided,
+                        color: theme == "dark" ? "#a0aec0" : "#a0aec0",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }),
+                      clearIndicator: (provided) => ({
+                        ...provided,
+                        color: theme === "dark" ? "#D1D5DB" : "#374151",
+                      }),
+                      singleValue: (provided) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        color: theme === "dark" ? "#D1D5DB" : "#374151",
+                        marginTop: "2px",
+                      }),
+                      menu: (provided) => ({
+                        ...provided,
+                        backgroundColor:
+                          theme === "dark" ? "#0B1437" : "#FFFFFF",
+                      }),
+                      menuList: (provided) => ({
+                        ...provided,
+                        backgroundColor: "transparent",
+                        color: theme === "dark" ? "#ffffff" : "#374151",
+                        marginTop: "2px",
+                      }),
+                      option: (
+                        styles,
+                        { data, isDisabled, isFocused, isSelected }
+                      ) => {
+                        return {
+                          ...styles,
+                          backgroundColor: isFocused
+                            ? theme === "dark"
+                              ? "#707EAE"
+                              : "#d1d5db"
+                            : "transparent",
+                        };
+                      },
+                      container: (provided, state) => ({
+                        ...provided,
+                        color: "#4a5568",
+                      }),
+                    }}
+                  />
+                </div>
             </div>
           </div>
           <Button
