@@ -23,10 +23,11 @@ export default async function DemoPage(reloadData:any) {
   // const test = useContext(UserContext)
   console.log(cookie.get("token"))
   const data = await getData();
+  const columnsWdata = await columns(reloadData);
   if (data)
     return(
       <div>
-        <DataTable columns={columns} data={data} reload={reloadData}/>
+        <DataTable columns={columnsWdata} data={data} reload={reloadData}/>
       </div>
     )
   else 
