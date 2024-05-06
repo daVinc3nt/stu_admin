@@ -368,6 +368,7 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                       })}
                       value={weeks}
                       onChange={(e) => {
+                        
                         setWeeks(e.target.value)
                         // const newData= e.target.value.trim().split(',').map((num) => parseInt(num));
                         // setWeeksData(newData);
@@ -383,6 +384,7 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                       })}
                       value={periods}
                       onChange={(e) => {
+                        if(periods.length > 3)
                         setPeriods(e.target.value)
                         // const newData= e.target.value.trim().split(',').map((num) => parseInt(num));
                         // setPeriodsData(newData);

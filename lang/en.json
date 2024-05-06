@@ -133,6 +133,7 @@
     "course.detail":"Detail",
     "course.add1":"Add course",
     "course.major":"Major included",
+    "course.AddButton":"Add course",
     "course.course_condition": "Pre-courses",
     "course.classChildren":"Classes",
     "course.SearchBox":"Find by course name",
