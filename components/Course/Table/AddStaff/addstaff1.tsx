@@ -145,22 +145,16 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     const myToken: token = {
       token: cookie.get("token"),
     };
-    
-    const newData = weeks.trim().split(',').map((num) => parseInt(num));
-    setWeeksData([...weeksData, ...newData]);
-
-    const newData2 = periods.trim().split(',').map((num) => parseInt(num));
-    setPeriodsData([...periodsData, ...newData2]);
     console.log({
       ...Classdata, 
-      period: periodsData,  
-      weeks: weeksData
+      period: periods.trim().split(',').map((num) => parseInt(num)),  
+      weeks: weeks.trim().split(',').map((num) => parseInt(num))
     })
     const response= await Class.create(
       {
         ...Classdata, 
-        period: weeksData,  
-        weeks: periodsData
+        period: periods.trim().split(',').map((num) => parseInt(num)),  
+        weeks: weeks.trim().split(',').map((num) => parseInt(num))
       }
       , myToken)
       
@@ -373,7 +367,11 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                         id: "Class.weeks",
                       })}
                       value={weeks}
-                      onChange={(e) => setWeeks(e.target.value)}
+                      onChange={(e) => {
+                        setWeeks(e.target.value)
+                        // const newData= e.target.value.trim().split(',').map((num) => parseInt(num));
+                        // setWeeksData(newData);
+                      }}
                     />
 
                     <input
@@ -384,7 +382,11 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                         id: "Class.periods",
                       })}
                       value={periods}
-                      onChange={(e) => setPeriods(e.target.value)}
+                      onChange={(e) => {
+                        setPeriods(e.target.value)
+                        // const newData= e.target.value.trim().split(',').map((num) => parseInt(num));
+                        // setPeriodsData(newData);
+                      }}
                     />                    
               </div>
         

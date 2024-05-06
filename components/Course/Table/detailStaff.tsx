@@ -216,7 +216,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
                <FormattedMessage id="course.classChildren" />
                </div>
                <div className="border py-5 mt-4 items-center
-               bg-white dark:bg-[#20202a] h-fit  rounded-md text-black 
+               bg-white dark:bg-[#20202a] h-20  rounded-md text-black 
                 grid-cols-2 grid lg:grid-cols-3 p-10 gap-4 overflow-y-scroll no-scrollbar">
                {
                     Classes.map(
