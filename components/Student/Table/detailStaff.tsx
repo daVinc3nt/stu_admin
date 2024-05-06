@@ -5,7 +5,7 @@ import { Button } from "@nextui-org/react";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { User, Pencil } from "lucide-react";
 import { FormattedMessage } from "react-intl";
-import { StudentID, StudentOperation, token } from "@/ambLib/amb";
+import { StudentID, StudentOperation, TeacherID, TeacherOperation, token } from "@/ambLib/amb";
 import cookie from "js-cookie";
 const KeyCanEdit = [    
   "fullname",                 
@@ -79,11 +79,13 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
   const handleSaveClick = async () => {
     // Gửi API về server để cập nhật dữ liệu
     // Sau khi hoàn thành, có thể tắt chế độ chỉnh sửa
+    // Gửi API về server để cập nhật dữ liệu
+    // Sau khi hoàn thành, có thể tắt chế độ chỉnh sửa
     const myToken: token = {
       token: cookie.get("token"),
     };
-    const condition: StudentID = {student_id: dataInitial.student_id }
-    const staff =new StudentOperation()
+    const condition: TeacherID = {teacher_id: dataInitial.teacher_id }
+    const staff =new TeacherOperation()
     setIsEditing(false);
     await staff.updateByAdmin(updateData, condition, myToken )
     reload()

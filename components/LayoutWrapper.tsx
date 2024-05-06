@@ -45,6 +45,7 @@ const Wrapper = ({ children }: LayoutProps) => {
                   width="250"
                   height="250"
           />
+
           <motion.img
                   variants={leftSideVariant}
                   initial="initial"
