@@ -302,7 +302,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose, reload }) => {
                       id: "course.credits",
                     })}
                     value={coursedata.credits ?coursedata.credits:"" }
-                    onChange={(e) => {handleInputChange("credits", parseInt(e.target.value))}}
+                    onChange={(e) => {handleInputChange("credits", e.target.value)}}
                   />
                 </div>
                 <Select
