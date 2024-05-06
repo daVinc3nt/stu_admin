@@ -32,6 +32,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
   const [updateData, setupdateData] = useState<any>({});
   const [Classes, setClasses] =useState([]);
   const handleUpdateData =(e, key:string, input:string = "string") => {
+    console.log(typeof e.target.value)
     if (input == "number")
       setupdateData({...updateData, [key]: parseInt(e.target.value)});
     else 
@@ -66,10 +67,8 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
       };
       const condition: CourseID = {course_id: dataInitial.course_id }
       const res = await course.findClasses(condition, myToken)
-      console.log("hello",(res as any).data)
       if (!res.error)
         {
-          console.log("hello")
           setClasses((res as any).data)
         }
     }
@@ -96,7 +95,13 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     };
     const condition: CourseID = {course_id: dataInitial.course_id }
     setIsEditing(false);
-    await course.update(updateData, condition, myToken )
+    console.log(updateData)
+    const res = await course.update(updateData, condition, myToken )
+    if (res?.error?.error)
+      {
+        alert(res.error.message)
+        return
+      }
     reload()
   };
 
@@ -119,11 +124,19 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
             {isEditing && KeyCanEdit.includes(key) ? (
               <input
                 className="w-2/3 bg-transparent border-b-2 border-[#545e7b] text-black"
-                type="text"
+                type={typeof obj[key]}
                 value={obj[key]}
                 onChange={(e) => {
-                  setData({ ...obj, [key]: e.target.value });
-                  handleUpdateData(e, key);
+                  if (typeof obj[key] == "number")
+                    {
+                      setData({ ...obj, [key]: parseInt(e.target.value) });
+                      handleUpdateData(e, key, "number");
+                    }
+                  else 
+                  {
+                    setData({ ...obj, [key]: e.target.value });
+                    handleUpdateData(e, key);
+                  }
                 }}
               />
             ) : (
@@ -208,7 +221,6 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
                {
                     Classes.map(
                     (ele) => {
-                      console.log(ele)
                       return (
                         <div className="bg-gray-100 p-3 rounded-xl shadow-inner">
                           {ele.class_id}

@@ -153,8 +153,8 @@ const AddStaff1: React.FC<AddStaffProps> = ({ onClose, reload }) => {
     setPeriodsData([...periodsData, ...newData2]);
     console.log({
       ...Classdata, 
-      period: weeksData,  
-      weeks: periodsData
+      period: periodsData,  
+      weeks: weeksData
     })
     const response= await Class.create(
       {

@@ -91,6 +91,7 @@
     "teacher.homeroom_class": "Homeroom",
     "teacher.active": "Status",
     "teacher.detail": "Detail",
+    "teacher.SearchBox":"Find by teacher name",
     "teacher.username": "Username",
     "teacher.cannotEdit":"Editable information",
     "teacher.canEdit":"Non-editable information",
