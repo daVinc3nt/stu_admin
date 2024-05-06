@@ -84,8 +84,8 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     const myToken: token = {
       token: cookie.get("token"),
     };
-    const condition: TeacherID = {teacher_id: dataInitial.teacher_id }
-    const staff =new TeacherOperation()
+    const condition: StudentID = {student_id: dataInitial.student_id }
+    const staff =new StudentOperation()
     setIsEditing(false);
     await staff.updateByAdmin(updateData, condition, myToken )
     reload()
