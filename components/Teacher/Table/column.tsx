@@ -24,7 +24,7 @@ export type teacher = {
   district: string;
   email: string;
   fullname: string;
-  id: number;
+  teacher_id: number;
   paid_salary: number;
   password: string;
   phone_number: string;
@@ -37,144 +37,151 @@ export type teacher = {
   town: string;
   username: string;
 };
-export const columns: ColumnDef<teacher>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() ? "indeterminate" : false)
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "teacher_id",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <FormattedMessage id="teacher.teacher_id" />
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "fullname",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <FormattedMessage id="teacher.fullname" />
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "phone_number",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <FormattedMessage id="teacher.phone_number" />
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "major",
+type MyColumnDef<T> = ColumnDef<T> & {
+  reloadData?: () => void;
+};
+export async function columns(
+  reloadData: () => void,
+): Promise<MyColumnDef<any>[]> {
+  return [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() ? "indeterminate" : false)
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "teacher_id",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              <FormattedMessage id="teacher.teacher_id" />
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "fullname",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              <FormattedMessage id="teacher.fullname" />
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "phone_number",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              <FormattedMessage id="teacher.phone_number" />
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "major",
 
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <FormattedMessage id="teacher.major" />
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "active",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <FormattedMessage id="teacher.active" />
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center">
-          {row.original.active ? (
-            <span className=" text-green-500">
-              <FormattedMessage id="isActive" />
-            </span>
-          ) : (
-            <span className=" text-red-500">
-              <FormattedMessage id="isInActive" />
-            </span>
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "Chi tiết/Sửa đổi",
-    header: () => {
-      return <FormattedMessage id="teacher.detail" />;
-    },
-    cell: ({ row }) => {
-      const [modalIsOpen, setModalIsOpen] = useState(false);
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              <FormattedMessage id="teacher.major" />
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "active",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              <FormattedMessage id="teacher.active" />
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="flex items-center">
+              {row.original.active ? (
+                <span className=" text-green-500">
+                  <FormattedMessage id="isActive" />
+                </span>
+              ) : (
+                <span className=" text-red-500">
+                  <FormattedMessage id="isInActive" />
+                </span>
+              )}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "Chi tiết/Sửa đổi",
+        header: () => {
+          return <FormattedMessage id="teacher.detail" />;
+        },
+        cell: ({ row }) => {
+          const [modalIsOpen, setModalIsOpen] = useState(false);
 
-      const openModal = () => {
-        setModalIsOpen(true);
-      };
+          const openModal = () => {
+            setModalIsOpen(true);
+          };
 
-      const closeModal = () => {
-        setModalIsOpen(false);
-      };
+          const closeModal = () => {
+            setModalIsOpen(false);
+          };
 
-      return (
-        <div className="relative flex  mr-2">
-          <Button
-            onClick={openModal}
-            className="bg-transparent hover:bg-white font-bold hover:text-black py-1 px-[0.65rem] border border-gray-600 hover:border-transparent rounded-full"
-          >
-            +
-          </Button>
-          {modalIsOpen && (
-            <DetailStaff onClose={closeModal} dataInitial={row.original} />
-          )}
-        </div>
-      );
-    },
-  },
-];
+          return (
+            <div className="relative flex  mr-2">
+              <Button
+                onClick={openModal}
+                className="bg-transparent hover:bg-white font-bold hover:text-black py-1 px-[0.65rem] border border-gray-600 hover:border-transparent rounded-full"
+              >
+                +
+              </Button>
+              {modalIsOpen && (
+                <DetailStaff onClose={closeModal} dataInitial={row.original} reload={reloadData} />
+              )}
+            </div>
+          );
+        },
+      }
+    ]
+}

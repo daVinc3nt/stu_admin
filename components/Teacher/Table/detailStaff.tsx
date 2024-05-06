@@ -5,7 +5,8 @@ import { Button } from "@nextui-org/react";
 import { FaTrash, FaPen } from "react-icons/fa";
 import { User, Pencil } from "lucide-react";
 import { FormattedMessage } from "react-intl";
-import { TeacherOperation } from "@/ambLib/amb";
+import { TeacherID, TeacherOperation, token } from "@/ambLib/amb";
+import cookie from "js-cookie";
 const KeyCanEdit = [    
   "fullname",                 
   "date_of_birth",                                     
@@ -25,9 +26,10 @@ const KeyCanEdit = [
 interface DetailStaffProps {
   onClose: () => void;
   dataInitial: any;
+  reload: any;
 }
 
-const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial }) => {
+const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial,reload }) => {
   const [isShaking, setIsShaking] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
@@ -74,13 +76,15 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial }) => {
   const handleEditClick = () => {
     setIsEditing(true);
   };
-  const handleSaveClick = () => {
-    // Gửi API về server để cập nhật dữ liệu
-    // Sau khi hoàn thành, có thể tắt chế độ chỉnh sửa
-    // const condition: UpdatingteacherInfoByAdmin = {staff_id: dataInitial.staff_id }
-    // const staff =new teacherOperation()
-    // staff.updateByAdmin(updateData, condition, )
-    // setIsEditing(false);
+  const handleSaveClick = async () => {
+    const myToken: token = {
+      token: cookie.get("token"),
+    };
+    const condition: TeacherID = {teacher_id: dataInitial.teacher_id }
+    const staff =new TeacherOperation()
+    setIsEditing(false);
+    await staff.updateByAdmin(updateData, condition, myToken )
+    reload()
   };
 
   const traverse = (obj, isEditing, canEdit?) => {
@@ -163,7 +167,7 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial }) => {
       >
         <div className="relative items-center justify-center flex-col flex h-10 w-full border-b-2 border-[#545e7b]">
           <div className="font-bold text-lg sm:text-2xl pb-2 text-black dark:text-white w-full text-center">
-            <FormattedMessage id="teacher.innfomation" />
+            <FormattedMessage id="teacher.infomation" />
           </div>
           <Button
             className="absolute right-0 w-8 h-8 rounded-full mb-2 hover:bg-gray-300"
