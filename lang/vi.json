@@ -71,7 +71,7 @@
     "order.mass": "Khối lượng (kg)",
     "order.height": "Cao (m)",
     "order.length": "Dài (kg)",
-    "order.chooseexcel":"Vui lòng chọn file excel chứa thông tin đơn hàng",
+    "order.chooseexcel":"Vui lòng chọn file excel chứa thông tin sinh viên",
     "order.downloadsample":" *Lưu ý: Bạn cần tải file dưới đây về trước khi tạo sinh viên hàng loạt. Bạn không được thay đổi tên cột, có thể đổi tên file và thêm đơn mới vào như mẫu.",
     "order.width": "Rộng (kg)",
     "order.fee": "Phí (vnd)",
