@@ -87,8 +87,17 @@ const DetailStaff: React.FC<DetailStaffProps> = ({ onClose, dataInitial, reload 
     const condition: StudentID = {student_id: dataInitial.student_id }
     const staff =new StudentOperation()
     setIsEditing(false);
-    await staff.updateByAdmin(updateData, condition, myToken )
+    const res =await staff.updateByAdmin(updateData, condition, myToken )
     reload()
+    if (res?.error)
+      {
+        alert(res?.error?.message)
+      }
+    else 
+    {
+      alert(res?.message);
+      reload()
+    }
   };
 
   const traverse = (obj, isEditing, canEdit?) => {
